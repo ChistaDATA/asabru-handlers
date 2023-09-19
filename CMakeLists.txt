@@ -1,0 +1,43 @@
+cmake_minimum_required(VERSION 3.21)
+project(asabru_handlers)
+include(CMakePrintHelpers)
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Add compiler warnings
+if (CMAKE_COMPILER_IS_GNUCXX)
+    add_compile_options(-Wall)
+endif()
+
+include_directories(../asabru-engine/src/socket)
+include_directories(../libuv/include)
+include_directories(../asabru-commons/src/config)
+include_directories(../asabru-commons/src)
+include_directories(../asabru-parsers/src)
+
+# Set source directory
+set(SOURCE_DIRECTORY "src")
+
+# Collect all source files
+file(GLOB_RECURSE PLUGIN_SOURCES "${SOURCE_DIRECTORY}/*.cpp")
+
+# Add build directory
+set(BUILD_DIRECTORY "build")
+
+cmake_print_variables(PLUGIN_SOURCES)
+
+foreach(PLUGIN_SOURCE ${PLUGIN_SOURCES})
+    get_filename_component(FILE_NAME ${PLUGIN_SOURCE} NAME)
+    string(REPLACE ".cpp" "" LIB_NAME ${FILE_NAME})
+    set(LIB_NAMES ${LIB_NAMES} ${LIB_NAME})
+    add_library(${LIB_NAME} SHARED ${PLUGIN_SOURCE})
+    target_link_libraries(
+        ${LIB_NAME} 
+                ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
+                ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
+                ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
+                ${CMAKE_SOURCE_DIR}/../asabru-parsers/build/lib/libasabru_parsers.a
+    )
+endforeach(PLUGIN_SOURCE ${PLUGIN_SOURCES})
