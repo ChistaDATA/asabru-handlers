@@ -5,9 +5,14 @@
 #include "LineGrabber.h"
 #include "CommonTypes.h"
 
-CHttpHandler::CHttpHandler(CHttpParser *parser)
+// CHttpHandler::CHttpHandler(CHttpParser *parser)
+// {
+//     this->parser = parser;
+// }
+
+CHttpHandler::CHttpHandler()
 {
-    this->parser = parser;
+    // this->parser = parser;
 }
 
 /**
@@ -27,24 +32,24 @@ void *CHttpHandler::HandleUpstreamData(void *buffer, int buffer_length, uv_strea
 
     // Parse the buffer to a metadata struct
     // This is done so as to analyze the packet easily and filter or apply custom logic
-    HttpMetadata metadata = this->parser->construct(buffer, buffer_length);
+    // HttpMetadata metadata = this->parser->construct(buffer, buffer_length);
 
-    // Log the Content
-    this->parser->logMetadata(&metadata);
+    // // Log the Content
+    // this->parser->logMetadata(&metadata);
 
-    // Reconstruct the buffer from the metadata struct
-    void *deconstructedBuffer = this->parser->deconstruct(&metadata);
+    // // Reconstruct the buffer from the metadata struct
+    // void *deconstructedBuffer = this->parser->deconstruct(&metadata);
 
-    int deconstructedBufferSize = strlen((char *)deconstructedBuffer);
-    cout << "Lengths : " << buffer_length << " " << deconstructedBufferSize << endl;
+    // int deconstructedBufferSize = strlen((char *)deconstructedBuffer);
+    // cout << "Lengths : " << buffer_length << " " << deconstructedBufferSize << endl;
 
     // Data received from the client, forward it to the target server
     uv_write_t write_req;
-    uv_buf_t write_buf = uv_buf_init((char *)deconstructedBuffer, deconstructedBufferSize);
+    uv_buf_t write_buf = uv_buf_init((char *)buffer, buffer_length);
     uv_write(&write_req, (uv_stream_t *)target, &write_buf, 1, NULL);
 
     // free the buffer memory
-    free(deconstructedBuffer);
+    // free(deconstructedBuffer);
 }
 
 /**
@@ -115,4 +120,14 @@ void CHttpHandler::LogResponse(char *buffer, int len)
     }
     cout << body << endl;
     cout << "================================================================================" << endl;
+}
+
+extern "C" CHttpHandler *createCHttpHandler()
+{
+    return new CHttpHandler;
+}
+
+extern "C" void destroyCHttpHandler(CHttpHandler *c)
+{
+    delete c;
 }

@@ -2,7 +2,6 @@
 
 #include "ServerSocket.h"
 #include "CProxyHandler.h"
-#include "../config/config_types.h"
 
 pair<string, string> ChopLine(string str);
 
