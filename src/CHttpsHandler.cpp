@@ -3,6 +3,8 @@
 #include "Utils.h"
 #include "./CHttpsHandler.h"
 #include "LineGrabber.h"
+#include "CommonTypes.h"
+
 using namespace std;
 
 CHttpsHandler::CHttpsHandler()
@@ -95,4 +97,14 @@ void CHttpsHandler::LogResponse(char *buffer, int len)
     }
     std::cout << body << endl;
     std::cout << "================================================================================" << endl;
+}
+
+extern "C" CHttpsHandler *createCHttpsHandler()
+{
+    return new CHttpsHandler;
+}
+
+extern "C" void destroyCHttpsHandler(CHttpsHandler *c)
+{
+    delete c;
 }

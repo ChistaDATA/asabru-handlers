@@ -31,3 +31,13 @@ void *CMySQLHandler::HandleDownStreamData(void *buffer, int buffer_length, uv_st
     uv_buf_t write_buf = uv_buf_init((char *) buffer, buffer_length);
     uv_write(&write_req, client, &write_buf, 1, NULL);
 }
+
+extern "C" CMySQLHandler *createCMySQLHandler()
+{
+    return new CMySQLHandler;
+}
+
+extern "C" void destroyCHWirePTHandler(CMySQLHandler *c)
+{
+    delete c;
+}

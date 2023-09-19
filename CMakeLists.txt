@@ -12,6 +12,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 include_directories(../asabru-engine/src/socket)
+include_directories(../asabru-engine/src/interface)
 include_directories(../libuv/include)
 include_directories(../asabru-commons/src/config)
 include_directories(../asabru-commons/src)
