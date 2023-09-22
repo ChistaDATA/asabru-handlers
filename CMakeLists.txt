@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
 project(asabru_handlers)
 include(CMakePrintHelpers)
+
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 # Add compiler warnings
 if (CMAKE_COMPILER_IS_GNUCXX)
