@@ -20,7 +20,7 @@ CHttpHandler::CHttpHandler()
  * @param buffer - the buffer that we receive from upstream ( source dbs )
  * @param length - length of the buffer
  */
-void *CHttpHandler::HandleUpstreamData(void *buffer, int buffer_length, uv_stream_t *target)
+void *CHttpHandler::HandleUpstreamData(void *buffer, int buffer_length, SocketClient *target)
 {
     cout << "=============== CH http(up) ===================" << endl;
     cout << "Received a Client packet..................... " << endl;
@@ -44,9 +44,10 @@ void *CHttpHandler::HandleUpstreamData(void *buffer, int buffer_length, uv_strea
     // cout << "Lengths : " << buffer_length << " " << deconstructedBufferSize << endl;
 
     // Data received from the client, forward it to the target server
-    uv_write_t write_req;
-    uv_buf_t write_buf = uv_buf_init((char *)buffer, buffer_length);
-    uv_write(&write_req, (uv_stream_t *)target, &write_buf, 1, NULL);
+    // uv_write_t write_req;
+    // uv_buf_t write_buf = uv_buf_init((char *)buffer, buffer_length);
+    // uv_write(&write_req, (uv_stream_t *)target, &write_buf, 1, NULL);
+    target->SendBytes((char *) buffer, buffer_length);
 
     // free the buffer memory
     // free(deconstructedBuffer);
@@ -58,7 +59,7 @@ void *CHttpHandler::HandleUpstreamData(void *buffer, int buffer_length, uv_strea
  * @param length - length of the buffer
  * @param clientData - contains connection information about the client
  */
-void *CHttpHandler::HandleDownStreamData(void *buffer, int buffer_length, uv_stream_t *client)
+void *CHttpHandler::HandleDownStreamData(void *buffer, int buffer_length, Socket *client)
 {
 
     // Log the Content and Forward the Data to the EndPoint
@@ -68,9 +69,11 @@ void *CHttpHandler::HandleDownStreamData(void *buffer, int buffer_length, uv_str
     cout << "Packet Type = " << (int)*((unsigned char *)buffer) << endl;
 
     // Data received from the target server, forward it to the client
-    uv_write_t write_req;
-    uv_buf_t write_buf = uv_buf_init((char *) buffer, buffer_length);
-    uv_write(&write_req, client, &write_buf, 1, NULL);
+    // uv_write_t write_req;
+    // uv_buf_t write_buf = uv_buf_init((char *) buffer, buffer_length);
+    // uv_write(&write_req, client, &write_buf, 1, NULL);
+
+    client->SendBytes((char *) buffer, buffer_length);
 }
 
 void CHttpHandler::LogResponse(char *buffer, int len)
