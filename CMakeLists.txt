@@ -15,7 +15,7 @@ endif()
 
 include_directories(../asabru-engine/src/socket)
 include_directories(../asabru-engine/src/interface)
-include_directories(../libuv/include)
+# include_directories(../libuv/include)
 include_directories(../asabru-commons/src/config)
 include_directories(../asabru-commons/src)
 include_directories(../asabru-parsers/src)
@@ -38,7 +38,7 @@ foreach(PLUGIN_SOURCE ${PLUGIN_SOURCES})
     add_library(${LIB_NAME} SHARED ${PLUGIN_SOURCE})
     target_link_libraries(
         ${LIB_NAME} 
-                ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
+                # ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
                 ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
                 ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
                 ${CMAKE_SOURCE_DIR}/../asabru-parsers/build/lib/libasabru_parsers.a

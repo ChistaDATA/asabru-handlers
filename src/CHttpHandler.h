@@ -2,8 +2,7 @@
 
 #include "CProxyHandler.h"
 #include "CHttpParser.h"
-
-pair<string, string> ChopLine(string str);
+#include "Utils.h"
 
 class CHttpHandler : public CProxyHandler {
     CHttpParser *parser = 0;

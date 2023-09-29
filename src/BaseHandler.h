@@ -4,9 +4,8 @@
 #include "CProxyHandler.h"
 #include "LineGrabber.h"
 #include "CommonTypes.h"
+#include "Utils.h"
 #include <map>
-
-pair<string, string> ChopLine(string str);
 
 class BaseHandler : public CProxyHandler
 {
