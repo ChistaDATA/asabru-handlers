@@ -36,6 +36,7 @@ foreach(PLUGIN_SOURCE ${PLUGIN_SOURCES})
     string(REPLACE ".cpp" "" LIB_NAME ${FILE_NAME})
     set(LIB_NAMES ${LIB_NAMES} ${LIB_NAME})
     add_library(${LIB_NAME} SHARED ${PLUGIN_SOURCE})
+    set_property(TARGET ${LIB_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
     target_link_libraries(
         ${LIB_NAME} 
                 # ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a

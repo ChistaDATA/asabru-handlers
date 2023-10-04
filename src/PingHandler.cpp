@@ -1,5 +1,5 @@
 #include "PingHandler.h"
-#include "ServerSocket.h"
+#include "CServerSocket.h"
 
 bool PingHandler::Handler(void *Buffer, int len, CLIENT_DATA &clientData)
 {
