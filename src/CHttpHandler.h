@@ -2,15 +2,13 @@
 
 #include "CProxyHandler.h"
 #include "CHttpParser.h"
+#include "BaseHandler.h"
 #include "Utils.h"
 
-class CHttpHandler : public CProxyHandler {
+class CHttpHandler : public BaseHandler {
     CHttpParser *parser = 0;
 public:
     CHttpHandler();
     // CHttpHandler(CHttpParser *parser);
-    virtual void * HandleUpstreamData(void * buffer, int buffer_length, SocketClient *target);
-    virtual void * HandleDownStreamData(void * buffer, int buffer_length, Socket *client);
-
     void LogResponse(char * buffer, int len);
 };
