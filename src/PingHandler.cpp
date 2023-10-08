@@ -3,7 +3,7 @@
 
 bool PingHandler::Handler(void *Buffer, int len, CLIENT_DATA &clientData)
 {
-    cout << "Pinged from Remote Server ....................." << endl;
+    std::cout << "Pinged from Remote Server ....................." << std::endl;
     return true;
 }
 

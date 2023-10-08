@@ -5,13 +5,10 @@
 #include "LineGrabber.h"
 #include "CommonTypes.h"
 #include "Utils.h"
-#include "CHttpParser.h"
 #include <map>
 class BaseHandler : public CProxyHandler
 {
     public:
-        // BaseHandler() {
-        // };
         /**
          * Function that handles upstream data
          * @param buffer - the buffer that we receive from upstream ( source dbs )
@@ -23,26 +20,8 @@ class BaseHandler : public CProxyHandler
             std::cout << "Length of Packet is " << buffer_length << endl;
             std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << endl;
 
-            // Parse the buffer to a metadata struct
-            // This is done so as to analyze the packet easily and filter or apply custom logic
-            auto it = exec_context->find("CHttpParser");
-            if (it == exec_context->end()) {
-                std::cout << "Error fetching parser" << std::endl;
-            }
-            CHttpParser *parser = (CHttpParser *) it->second;
-            HttpMetadata metadata = parser->construct(buffer, buffer_length);
-
-            // Log the Content
-            parser->logMetadata(&metadata);
-
-            // // Reconstruct the buffer from the metadata struct
-            void *deconstructedBuffer = parser->deconstruct(&metadata);
-
-            int deconstructedBufferSize = strlen((char *)deconstructedBuffer);
-            cout << "Lengths : " << buffer_length << " " << deconstructedBufferSize << endl;
-
             std::string result;
-            result.assign((char *) deconstructedBuffer, deconstructedBufferSize); 
+            result.assign((char *) buffer, buffer_length); 
             return result;
         }
 
