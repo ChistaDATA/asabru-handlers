@@ -2,9 +2,9 @@
 #define CH_WIRE_PROTOCOL_HANDLER_H
 
 #include "CServerSocket.h"
-#include "BaseHandler.h"
+#include "BaseProxyHandler.h"
 
-class CHWirePTHandler : public BaseHandler {
+class CHWirePTHandler : public BaseProxyHandler {
 
 public:
     CHWirePTHandler() {}

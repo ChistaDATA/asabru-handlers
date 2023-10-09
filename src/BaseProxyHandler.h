@@ -6,7 +6,7 @@
 #include "CommonTypes.h"
 #include "Utils.h"
 #include <map>
-class BaseHandler : public CProxyHandler
+class BaseProxyHandler : public CProxyHandler
 {
     public:
         /**
