@@ -2,9 +2,9 @@
 #define POSTGRESQL_PROTOCOL_HANDLER_H
 
 #include "CServerSocket.h"
-#include "BaseHandler.h"
+#include "BaseProxyHandler.h"
 
-class CPostgreSQLHandler : public BaseHandler
+class CPostgreSQLHandler : public BaseProxyHandler
 {
 public:
     CPostgreSQLHandler() {}

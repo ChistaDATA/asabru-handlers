@@ -2,10 +2,10 @@
 
 #include "CProxyHandler.h"
 #include "CHttpParser.h"
-#include "BaseHandler.h"
+#include "BaseProxyHandler.h"
 #include "Utils.h"
 
-class CHttpHandler : public BaseHandler
+class CHttpHandler : public BaseProxyHandler
 {
 private:
     CHttpParser *parser = 0;

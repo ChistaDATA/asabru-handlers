@@ -2,9 +2,9 @@
 
 #include "CServerSocket.h"
 #include "CProxyHandler.h"
-#include "BaseHandler.h"
+#include "BaseProxyHandler.h"
 
-class CHttpsHandler : public BaseHandler
+class CHttpsHandler : public BaseProxyHandler
 {
 public:
     CHttpsHandler();
