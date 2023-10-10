@@ -1,14 +1,11 @@
 #ifndef PING_HANDLER_DOT_H
 #define PING_HANDLER_DOT_H
 
-#include "CProtocolHandler.h"
+#include "BaseProtocolHandler.h"
 
-class PingHandler : public CProtocolHandler {
+class PingHandler : public BaseProtocolHandler {
 public:
     PingHandler() {}
-
-    virtual bool Handler(void *Buffer, int len, CLIENT_DATA &clientData);
-
     virtual ~PingHandler() {}
 
 };
