@@ -17,32 +17,16 @@ public:
      */
     std::string HandleData(void *buffer, int buffer_length, EXECUTION_CONTEXT *exec_context)
     {
-        //    HTTP/1.1 200 OK
-        //    Content-Type: text/plain
+        // Respond with a simple "Hello, World!" message
+        // std::string response = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello, World!";
 
-        //    Hello World\n
-
-        std::cout<<"HandleData "<<endl;
         string response = "";
-        response += "HTTP/1.1 200 OK\n";
-        response+="Content-Type: text/plain\n";
+        response += "HTTP/1.1 200 OK\r\n";
+        response+="Content-Length: 12\r\n";
+        response += "\r\n";
+        response += "Hello World!";
 
-        response+="Content-Length: 12";
-
-        //        map<string, string> *headers = &((*httpMetadata).headers);
-        //        for (auto i : *headers)
-        //        {
-        //            buffer += i.first + ":" + i.second + "\r\n";
-        //        }
-        //
-        response += "\n";
-        response += "Hello World\n";
-
-        size_t response_length = strlen(response.c_str());
-        char *result = (char *)malloc(response_length);
-        memcpy(result, response.c_str(), response_length);
-
-        return result;
+        return response;
     }
 
 };
