@@ -1,29 +1,6 @@
 #include "CHttpProtocolHandler.h"
 #include "CServerSocket.h"
 
-void printStringWithEscapes(const std::string& input) {
-    for (char c : input) {
-        switch (c) {
-            case '\n':
-                std::cout << "\\n";
-                break;
-            case '\r':
-                std::cout << "\\r";
-                break;
-            case '\t':
-                std::cout << "\\t";
-                break;
-            case '\\':
-                std::cout << "\\\\";
-                break;
-            // Add more cases for other escape sequences as needed
-            default:
-                std::cout << c;
-        }
-    }
-    std::cout << std::endl;
-}
-
 simple_http_server::HttpResponse CHttpProtocolHandler::HandleHttpRequest(const simple_http_server::HttpRequest &request)
 {
     auto it = request_handlers_.find(request.uri());
@@ -76,7 +53,7 @@ std::string CHttpProtocolHandler::HandleData(void *request_string, int buffer_le
     // Set response to write to client
     std::string response_string =
         to_string(http_response, http_request.method() != simple_http_server::HttpMethod::HEAD);
-    printStringWithEscapes(response_string);
+    // printStringWithEscapes(response_string);
     size_t response_length = response_string.length();
     char *result = (char *)malloc(response_length);
     memcpy(result, response_string.c_str(), response_length);
