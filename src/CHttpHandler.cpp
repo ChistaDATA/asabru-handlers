@@ -4,6 +4,7 @@
 #include "CHttpHandler.h"
 #include "LineGrabber.h"
 #include "CommonTypes.h"
+#include "http_message.h"
 
 /**
  * Function that handles upstream data
@@ -16,19 +17,13 @@ std::string CHttpHandler::HandleUpstreamData(void *buffer, int buffer_length, EX
     std::cout << "Length of Packet is " << buffer_length << endl;
     std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << endl;
 
-    HttpMetadata metadata = parser->construct(buffer, buffer_length);
+    simple_http_server::HttpRequest request = simple_http_server::string_to_request(std::string((char *) buffer)); 
 
-    // Log the Content
-    parser->logMetadata(&metadata);
+    std::string deconstructedRequest = simple_http_server::to_string(request);
 
-    // // Reconstruct the buffer from the metadata struct
-    void *deconstructedBuffer = parser->deconstruct(&metadata);
-
-    int deconstructedBufferSize = strlen((char *)deconstructedBuffer);
-    cout << "Lengths : " << buffer_length << " " << deconstructedBufferSize << endl;
-
+    int deconstructedBufferSize = strlen(deconstructedRequest.c_str());
     std::string result;
-    result.assign((char *)deconstructedBuffer, deconstructedBufferSize);
+    result.assign(deconstructedRequest.c_str(), deconstructedBufferSize);
     return result;
 }
 
