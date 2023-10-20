@@ -11,11 +11,11 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 # Add compiler warnings
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-Wall)
-endif()
+endif ()
 
 include_directories(../asabru-engine/src/socket)
 include_directories(../asabru-engine/src/interface)
-# include_directories(../libuv/include)
+include_directories(../libuv/include)
 include_directories(../asabru-commons/src/config)
 include_directories(../asabru-commons/src)
 include_directories(../asabru-parsers/src)
@@ -31,17 +31,17 @@ set(BUILD_DIRECTORY "build")
 
 cmake_print_variables(PLUGIN_SOURCES)
 
-foreach(PLUGIN_SOURCE ${PLUGIN_SOURCES})
+foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
     get_filename_component(FILE_NAME ${PLUGIN_SOURCE} NAME)
     string(REPLACE ".cpp" "" LIB_NAME ${FILE_NAME})
     set(LIB_NAMES ${LIB_NAMES} ${LIB_NAME})
     add_library(${LIB_NAME} SHARED ${PLUGIN_SOURCE})
     set_property(TARGET ${LIB_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
     target_link_libraries(
-        ${LIB_NAME} 
-                # ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
-                ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
-                ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
-                ${CMAKE_SOURCE_DIR}/../asabru-parsers/build/lib/libasabru_parsers.a
+            ${LIB_NAME}
+            ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
+            ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
+            ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
+            ${CMAKE_SOURCE_DIR}/../asabru-parsers/build/lib/libasabru_parsers.a
     )
-endforeach(PLUGIN_SOURCE ${PLUGIN_SOURCES})
+endforeach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
