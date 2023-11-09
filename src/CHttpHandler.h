@@ -4,6 +4,8 @@
 #include "CHttpParser.h"
 #include "BaseProxyHandler.h"
 #include "Utils.h"
+#include "http_message.h"
+#include <map>
 
 class CHttpHandler : public BaseProxyHandler
 {
