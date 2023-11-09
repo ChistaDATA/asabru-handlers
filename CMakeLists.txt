@@ -24,7 +24,7 @@ include_directories(../asabru-parsers/src)
 set(SOURCE_DIRECTORY "src")
 
 # Collect all source files
-file(GLOB_RECURSE PLUGIN_SOURCES "${SOURCE_DIRECTORY}/*.cpp")
+file(GLOB_RECURSE PLUGIN_SOURCES "${SOURCE_DIRECTORY}/*.cpp" "${SOURCE_DIRECTORY}/**/*.cpp")
 
 # Add build directory
 set(BUILD_DIRECTORY "build")

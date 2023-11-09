@@ -1,10 +1,4 @@
-
-#include <map>
-#include "Utils.h"
 #include "CHttpHandler.h"
-#include "LineGrabber.h"
-#include "CommonTypes.h"
-#include "http_message.h"
 
 /**
  * Function that handles upstream data

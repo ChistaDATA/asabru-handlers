@@ -13,8 +13,10 @@ private:
 public:
     CHttpProtocolHandler() {}
 
-    void RegisterHttpRequestHandler(const std::string &path, simple_http_server::HttpMethod method,
-                                    const HttpRequestHandler_t callback)
+    void RegisterHttpRequestHandler(
+            const std::string &path,
+            simple_http_server::HttpMethod method,
+            const HttpRequestHandler_t callback)
     {
         simple_http_server::Uri uri(path);
         request_handlers_[uri].insert(std::make_pair(method, std::move(callback)));
