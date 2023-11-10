@@ -3,8 +3,6 @@
 //
 
 #include "SendHtmlCommand.h"
-#include "http_message.h"
-#include <fstream>
 
 extern "C" SendHtmlCommand *createSendHtmlCommand()
 {
