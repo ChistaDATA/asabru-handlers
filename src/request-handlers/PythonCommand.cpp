@@ -1,5 +1,7 @@
 #include "PythonCommand.h"
 #include "PythonInterpreter.h"
+#include "json.hpp"
+#include "../../../nlohmann_json/single_include/nlohmann/json.hpp"
 
 extern "C" PythonCommand *createPythonCommand() {
     return new PythonCommand;
@@ -18,8 +20,11 @@ bool PythonCommand::Execute(ComputationContext *context) {
         PythonInterpreter pythonInterpreter;
 
         ComputationContext *pythonComputationContext = new ComputationContext;
-        pythonComputationContext->Put("key1", std::string("4"));
-        pythonComputationContext->Put("key2", std::string("5"));
+        nlohmann::json body = nlohmann::json::parse(request->content());
+        std::string pythonCommandParameters = body["inputParams"].dump();
+        std::unordered_map<std::string, std::string> params;
+        params["inputParams"] = pythonCommandParameters;
+        pythonComputationContext->Put("params", params);
 
         pythonInterpreter.Execute("multiply", pythonComputationContext);
         auto content = std::any_cast<std::string>(pythonComputationContext->Get("response"));
