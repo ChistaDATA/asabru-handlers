@@ -5,8 +5,6 @@
 #include "LineGrabber.h"
 #include "CommonTypes.h"
 
-using namespace std;
-
 CHttpsHandler::CHttpsHandler()
 {
 }
@@ -18,9 +16,9 @@ CHttpsHandler::CHttpsHandler()
  */
 std::string CHttpsHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
-    std::cout << "Received a Client packet..................... " << endl;
-    std::cout << "Length of Packet is " << buffer_length << endl;
-    std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << endl;
+    std::cout << "Received a Client packet..................... " << std::endl;
+    std::cout << "Length of Packet is " << buffer_length << std::endl;
+    std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << std::endl;
 
     std::string result;
     result.assign((char *)buffer, buffer_length);
@@ -34,9 +32,9 @@ std::string CHttpsHandler::HandleUpstreamData(void *buffer, ssize_t buffer_lengt
  */
 std::string CHttpsHandler::HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
-    std::cout << "Received a Server packet..................... " << endl;
-    std::cout << "Length of Packet is " << buffer_length << endl;
-    std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << endl;
+    std::cout << "Received a Server packet..................... " << std::endl;
+    std::cout << "Length of Packet is " << buffer_length << std::endl;
+    std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << std::endl;
 
     std::string result;
     result.assign((char *)buffer, buffer_length);
