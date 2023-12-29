@@ -18,7 +18,7 @@ public:
      */
     std::string HandleData(void *request_string, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
     {
-        string response = "";
+        std::string response = "";
         response += "HTTP/1.1 200 OK\r\n";
         response += "Content-Type: text/plain\r\n";
         response += "Content-Length: 12\r\n";

@@ -24,14 +24,16 @@ simple_http_server::HttpResponse CHttpProtocolHandler::HandleHttpRequest(const s
  * @param request_string - the buffer that we receive from client
  * @param buffer_length - length of the buffer
  */
-std::string CHttpProtocolHandler::HandleData(void *request_string, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+std::string CHttpProtocolHandler::HandleData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
     simple_http_server::HttpRequest http_request;
     simple_http_server::HttpResponse http_response;
 
     try
     {
-        http_request = simple_http_server::string_to_request((char *)request_string);
+        std::string request_string = (char *) buffer;
+        request_string = request_string.substr(0, buffer_length);
+        http_request = simple_http_server::string_to_request(request_string);
         http_response = HandleHttpRequest(http_request);
     }
     catch (const std::invalid_argument &e)
