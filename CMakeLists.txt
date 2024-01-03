@@ -12,6 +12,9 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-Wall)
 endif ()
 
+# Set DEBUG preprocessor flag
+add_compile_definitions(DEBUG)
+
 # Find Python
 find_package(Python COMPONENTS Interpreter Development)
 if (Python_FOUND)
@@ -21,13 +24,15 @@ else()
 endif()
 include_directories(${Python_INCLUDE_DIRS})
 
-include_directories(../asabru-engine/src/socket)
-include_directories(../asabru-engine/src/interface)
+# Find OpenSSL library
+find_package(OpenSSL REQUIRED)
+
+# Find SqlLite3
+find_package (SQLite3 REQUIRED)
+include_directories(${SQLite3_INCLUDE_DIRS})
+
 include_directories(../libuv/include)
 include_directories(../nlohmann_json/single_include/nlohmann)
-include_directories(../asabru-commons/src/config)
-include_directories(../asabru-commons/src)
-include_directories(../asabru-commons/src/util)
 include_directories(../asabru-parsers/src)
 
 # Set source directory
@@ -38,6 +43,21 @@ file(COPY src/python-handlers DESTINATION .)
 # Add build directory
 set(BUILD_DIRECTORY "build")
 
+MACRO(HEADER_DIRECTORIES search_path return_list)
+    FILE(GLOB_RECURSE new_list ${search_path})
+    SET(dir_list "")
+    FOREACH(file_path ${new_list})
+        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
+        SET(dir_list ${dir_list} ${dir_path})
+    ENDFOREACH()
+    LIST(REMOVE_DUPLICATES dir_list)
+    SET(${return_list} ${dir_list})
+ENDMACRO()
+
+HEADER_DIRECTORIES("../asabru-commons/src/*.h" header_dir_list)
+include_directories(${header_dir_list})
+HEADER_DIRECTORIES("../asabru-engine/src/*.h" header_dir_list)
+include_directories(${header_dir_list})
 
 foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
     get_filename_component(FILE_NAME ${PLUGIN_SOURCE} NAME)
@@ -50,7 +70,8 @@ foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
             )
     target_link_libraries(
             ${LIB_NAME}
-            ${Python_LIBRARIES}
+            PUBLIC ${Python_LIBRARIES}
+            PUBLIC ${SQLite3_LIBRARIES}
             ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
             ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
             ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
