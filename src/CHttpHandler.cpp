@@ -7,9 +7,9 @@
  */
 std::string CHttpHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
-    std::cout << "Received a Client packet..................... " << std::endl;
-    std::cout << "Length of Packet is " << buffer_length << std::endl;
-    std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << std::endl;
+    LOG_INFO("Received a Client packet..................... ");
+    LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
+    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
 
     std::string request_string = (char *) buffer;
     request_string = request_string.substr(0, buffer_length);
@@ -30,9 +30,9 @@ std::string CHttpHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length
  */
 std::string CHttpHandler::HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
-    std::cout << "Received a Server packet..................... " << std::endl;
-    std::cout << "Length of Packet is " << buffer_length << std::endl;
-    std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << std::endl;
+    LOG_INFO("Received a Server packet..................... ");
+    LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
+    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
 
     std::string result;
     result.assign((char *)buffer, buffer_length);

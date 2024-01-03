@@ -1,5 +1,5 @@
 #include "UpdateEndPointServiceCommand.h"
-
+#include "Logger.h"
 
 extern "C" UpdateEndPointServiceCommand *createUpdateEndPointServiceCommand()
 {
@@ -26,7 +26,7 @@ bool  UpdateEndPointServiceCommand::Execute(ComputationContext *context)
         context->Put("response", response);
         return true;
     } else {
-        std::cout << "Function pointer type mismatch." << std::endl;
+        LOG_ERROR("Function pointer type mismatch.");
         return false;
     }
 }
