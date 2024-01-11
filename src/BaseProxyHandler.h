@@ -16,7 +16,7 @@ class BaseProxyHandler : public CProxyHandler
          * @param buffer - the buffer that we receive from upstream ( source dbs )
          * @param length - length of the buffer
          */
-        std::string HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+        virtual std::string HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
         {
             LOG_INFO("Received a Client packet..................... ");
             LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
@@ -32,7 +32,7 @@ class BaseProxyHandler : public CProxyHandler
          * @param buffer - the buffer / response that we receive from downstream ( target dbs )
          * @param length - length of the buffer
          */
-        std::string HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+        virtual std::string HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
         {
             LOG_INFO("Received a Server packet..................... ");
             LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
