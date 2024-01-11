@@ -15,6 +15,9 @@ endif ()
 # Set DEBUG preprocessor flag
 add_compile_definitions(DEBUG)
 
+# Find zlib
+find_package(ZLIB)
+
 # Find Python
 find_package(Python COMPONENTS Interpreter Development)
 if (Python_FOUND)
@@ -32,6 +35,7 @@ find_package (SQLite3 REQUIRED)
 include_directories(${SQLite3_INCLUDE_DIRS})
 
 include_directories(../libuv/include)
+include_directories(../gzip-hpp/include)
 include_directories(../nlohmann_json/single_include/nlohmann)
 include_directories(../asabru-parsers/src)
 
@@ -72,6 +76,7 @@ foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
             ${LIB_NAME}
             PUBLIC ${Python_LIBRARIES}
             PUBLIC ${SQLite3_LIBRARIES}
+            PUBLIC ${ZLIB_LIBRARIES}
             ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
             ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
             ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
