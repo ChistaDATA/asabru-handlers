@@ -1,5 +1,5 @@
 #include "CHttpProtocolHandler.h"
-#include "CServerSocket.h"
+#include "Logger.h"
 
 simple_http_server::HttpResponse CHttpProtocolHandler::HandleHttpRequest(const simple_http_server::HttpRequest &request)
 {
@@ -24,15 +24,19 @@ simple_http_server::HttpResponse CHttpProtocolHandler::HandleHttpRequest(const s
  * @param request_string - the buffer that we receive from client
  * @param buffer_length - length of the buffer
  */
-std::string CHttpProtocolHandler::HandleData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+std::string CHttpProtocolHandler::HandleData(std::string buffer, unsigned long buffer_length, EXECUTION_CONTEXT *exec_context)
 {
     simple_http_server::HttpRequest http_request;
     simple_http_server::HttpResponse http_response;
 
     try
     {
-        std::string request_string = (char *) buffer;
+        std::string request_string = buffer;
         request_string = request_string.substr(0, buffer_length);
+        if (request_string.empty()) {
+            LOG_ERROR("Empty request string");
+            throw std::invalid_argument("Empty request string");
+        }
         http_request = simple_http_server::string_to_request(request_string);
         http_response = HandleHttpRequest(http_request);
     }
@@ -55,12 +59,7 @@ std::string CHttpProtocolHandler::HandleData(void *buffer, ssize_t buffer_length
     // Set response to write to client
     std::string response_string =
         to_string(http_response, http_request.method() != simple_http_server::HttpMethod::HEAD);
-    // printStringWithEscapes(response_string);
-    size_t response_length = response_string.length();
-    char *result = (char *)malloc(response_length);
-    memcpy(result, response_string.c_str(), response_length);
-
-    return result;
+    return response_string;
 }
 
 extern "C" CHttpProtocolHandler *createCHttpProtocolHandler()

@@ -28,7 +28,7 @@ public:
         request_handlers_[uri].insert(std::make_pair(method, std::move(callback)));
     }
 
-    virtual std::string HandleData(void *request_string, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context);
+    virtual std::string HandleData(std::string request_string, unsigned long buffer_length, EXECUTION_CONTEXT *exec_context);
     simple_http_server::HttpResponse HandleHttpRequest(const simple_http_server::HttpRequest &request);
 
     ~CHttpProtocolHandler() {}

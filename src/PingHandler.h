@@ -6,8 +6,8 @@
 class PingHandler : public BaseProtocolHandler {
 public:
     PingHandler() {}
+    std::string HandleData(std::string request_string, unsigned long buffer_length, EXECUTION_CONTEXT *exec_context) override;
     virtual ~PingHandler() {}
-
 };
 
 #endif

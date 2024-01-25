@@ -16,7 +16,7 @@ public:
      * @param buffer - the buffer that we receive from upstream ( source dbs )
      * @param length - length of the buffer
      */
-    std::string HandleData(void *request_string, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+    std::string HandleData(void *request_string, unsigned long buffer_length, EXECUTION_CONTEXT *exec_context)
     {
         std::string response = "";
         response += "HTTP/1.1 200 OK\r\n";
