@@ -14,12 +14,12 @@ std::string CHttpHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length
     std::string request_string = (char *) buffer;
     request_string = request_string.substr(0, buffer_length);
     simple_http_server::HttpRequest request = simple_http_server::string_to_request(request_string);
-
-    std::string deconstructedRequest = simple_http_server::to_string(request);
-
-    int deconstructedBufferSize = strlen(deconstructedRequest.c_str());
+    LOG_INFO(std::string("QUERY : ") + request.content());
+//    std::string deconstructedRequest = simple_http_server::to_string(request);
+//
+//    int deconstructedBufferSize = strlen(deconstructedRequest.c_str());
     std::string result;
-    result.assign(deconstructedRequest.c_str(), deconstructedBufferSize);
+    result.assign((char *) buffer, buffer_length);
     return result;
 }
 
