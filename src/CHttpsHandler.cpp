@@ -2,8 +2,7 @@
 #include <map>
 #include "Utils.h"
 #include "./CHttpsHandler.h"
-#include "LineGrabber.h"
-#include "CommonTypes.h"
+#include "http_message.h"
 
 CHttpsHandler::CHttpsHandler()
 {
@@ -19,6 +18,11 @@ std::string CHttpsHandler::HandleUpstreamData(void *buffer, ssize_t buffer_lengt
     std::cout << "Received a Client packet..................... " << std::endl;
     std::cout << "Length of Packet is " << buffer_length << std::endl;
     std::cout << "Packet Type = " << (int)*((unsigned char *)buffer) << std::endl;
+
+    std::string request_string = (char *) buffer;
+    request_string = request_string.substr(0, buffer_length);
+    simple_http_server::HttpRequest request = simple_http_server::string_to_request(request_string);
+    LOG_INFO(std::string("QUERY : ") + request.content());
 
     std::string result;
     result.assign((char *)buffer, buffer_length);
