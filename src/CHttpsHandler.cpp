@@ -22,7 +22,9 @@ std::string CHttpsHandler::HandleUpstreamData(void *buffer, ssize_t buffer_lengt
     std::string request_string = (char *) buffer;
     request_string = request_string.substr(0, buffer_length);
     simple_http_server::HttpRequest request = simple_http_server::string_to_request(request_string);
-    LOG_INFO(std::string("QUERY : ") + request.content());
+    if (!request.content().empty()) {
+        LOG_INFO(std::string("QUERY : ") + request.content());
+    }
 
     std::string result;
     result.assign((char *)buffer, buffer_length);
