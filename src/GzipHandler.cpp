@@ -11,15 +11,15 @@
  * @param buffer - the buffer that we receive from upstream ( source dbs )
  * @param length - length of the buffer
  */
-std::string GzipHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+std::string GzipHandler::HandleUpstreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
     LOG_INFO("GzipHandler::HandleUpstreamData");
     LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
-    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
+    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
     // All function calls must pass in a pointer of an
     // immutable character sequence (aka a string in C) and its size
-    const char * pointer = (const char *) buffer;
+    const char * pointer = buffer.c_str();
     std::size_t size = buffer_length;
 
     // Compress returns a std::string
@@ -36,14 +36,14 @@ std::string GzipHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length,
  * @param buffer - the buffer / response that we receive from downstream ( target dbs )
  * @param length - length of the buffer
  */
-std::string GzipHandler::HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+std::string GzipHandler::HandleDownStreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
     LOG_INFO("GzipHandler::HandleDownStreamData");
     LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
-    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
+    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
     std::string result;
-    result.assign((char *)buffer, buffer_length);
+    result.assign(buffer, buffer_length);
     return result;
 }
 

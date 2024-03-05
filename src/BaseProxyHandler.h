@@ -16,14 +16,14 @@ class BaseProxyHandler : public CProxyHandler
          * @param buffer - the buffer that we receive from upstream ( source dbs )
          * @param length - length of the buffer
          */
-        virtual std::string HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+        virtual std::string HandleUpstreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
         {
             LOG_INFO("Received a Client packet..................... ");
             LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
-            LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
+            LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
             std::string result;
-            result.assign((char *) buffer, buffer_length); 
+            result.assign(buffer, buffer_length);
             return result;
         }
 
@@ -32,14 +32,14 @@ class BaseProxyHandler : public CProxyHandler
          * @param buffer - the buffer / response that we receive from downstream ( target dbs )
          * @param length - length of the buffer
          */
-        virtual std::string HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+        virtual std::string HandleDownStreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
         {
             LOG_INFO("Received a Server packet..................... ");
             LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
-            LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
+            LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
             std::string result;
-            result.assign((char *) buffer, buffer_length); 
+            result.assign(buffer, buffer_length);
             return result;
         }
 
