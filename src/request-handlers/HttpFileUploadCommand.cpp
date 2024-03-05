@@ -64,7 +64,6 @@ bool HttpFileUploadCommand::Execute(ComputationContext *context) {
     std::cout << "content_length : " << content_length << std::endl;
     std::cout << "file_content_length : " << file_content.size() << std::endl;
     std::cout << "Request content 2 :" << std::endl;
-    Utils::printStringWithEscapes(file_content);
     // Save the received file
     {
         // Get download folder path

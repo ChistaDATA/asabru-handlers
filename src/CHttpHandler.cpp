@@ -1,29 +1,39 @@
 #include "CHttpHandler.h"
+#include <gzip/decompress.hpp>
 
 /**
  * Function that handles upstream data
  * @param buffer - the buffer that we receive from upstream ( source dbs )
  * @param length - length of the buffer
  */
-std::string CHttpHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+std::string CHttpHandler::HandleUpstreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
     LOG_INFO("Received a Client packet..................... ");
     LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
-    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
+    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
-    std::string request_string = (char *) buffer;
+    std::string request_string = buffer;
+    simple_http_server::HttpRequest request;
     if (!request_string.empty()) {
         request_string = request_string.substr(0, buffer_length);
 
-        simple_http_server::HttpRequest request = simple_http_server::string_to_request(request_string);
-        LOG_INFO(std::string("QUERY : ") + request.content());
+        request = simple_http_server::string_to_request(request_string);
+
+        /**
+         * Modify SNI for forward proxy to work ( Eg. snowflake )
+         */
+        //  request.SetHeader("Host", "ip24827.ap-southeast-1.snowflakecomputing.com");
+
+        if (request.GetHeader("Content-Encoding") == "gzip") {
+            std::string decompressed_data = gzip::decompress(request.content().data(), request.content().size());
+            LOG_INFO(std::string("QUERY : ") + decompressed_data);
+        } else {
+            LOG_INFO(std::string("QUERY : ") + request.content());
+        }
     }
 
-//    std::string deconstructedRequest = simple_http_server::to_string(request);
-//    int deconstructedBufferSize = strlen(deconstructedRequest.c_str());
-    std::string result;
-    result.assign((char *) buffer, buffer_length);
-    return result;
+    std::string deconstructedRequest = simple_http_server::to_string(request);
+    return deconstructedRequest;
 }
 
 /**
@@ -31,15 +41,13 @@ std::string CHttpHandler::HandleUpstreamData(void *buffer, ssize_t buffer_length
  * @param buffer - the buffer / response that we receive from downstream ( target dbs )
  * @param length - length of the buffer
  */
-std::string CHttpHandler::HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
+std::string CHttpHandler::HandleDownStreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context)
 {
     LOG_INFO("Received a Server packet..................... ");
     LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
-    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer)) );
+    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
-    std::string result;
-    result.assign((char *)buffer, buffer_length);
-    return result;
+    return buffer;
 }
 
 extern "C" CHttpHandler *createCHttpHandler()

@@ -11,12 +11,12 @@ public:
      * @param buffer - the buffer that we receive from upstream ( source dbs )
      * @param length - length of the buffer
      */
-    std::string HandleUpstreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context) override;
+    std::string HandleUpstreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context) override;
 
     /**
      * Function that handles downstream data
      * @param buffer - the buffer / response that we receive from downstream ( target dbs )
      * @param length - length of the buffer
      */
-    std::string HandleDownStreamData(void *buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context) override;
+    std::string HandleDownStreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context) override;
 };
