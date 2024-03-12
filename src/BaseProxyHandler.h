@@ -22,9 +22,7 @@ class BaseProxyHandler : public CProxyHandler
             LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
             LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
-            std::string result;
-            result.assign(buffer, buffer_length);
-            return result;
+            return buffer;
         }
 
         /**
@@ -38,9 +36,7 @@ class BaseProxyHandler : public CProxyHandler
             LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
             LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
 
-            std::string result;
-            result.assign(buffer, buffer_length);
-            return result;
+            return buffer;
         }
 
         void LogResponse(char *buffer, int len)

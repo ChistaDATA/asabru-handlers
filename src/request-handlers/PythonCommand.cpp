@@ -1,6 +1,6 @@
 #include "PythonCommand.h"
 #include "PythonInterpreter.h"
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 
 extern "C" PythonCommand *createPythonCommand() {
     return new PythonCommand;

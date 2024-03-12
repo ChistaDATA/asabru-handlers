@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 project(asabru_handlers)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -36,8 +36,12 @@ include_directories(${SQLite3_INCLUDE_DIRS})
 
 include_directories(../libuv/include)
 include_directories(../gzip-hpp/include)
-include_directories(../nlohmann_json/single_include/nlohmann)
 include_directories(../asabru-parsers/src)
+
+include(FetchContent)
+
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+FetchContent_MakeAvailable(json)
 
 # Set source directory
 set(SOURCE_DIRECTORY "src")
@@ -77,6 +81,7 @@ foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
             PUBLIC ${Python_LIBRARIES}
             PUBLIC ${SQLite3_LIBRARIES}
             PUBLIC ${ZLIB_LIBRARIES}
+            PRIVATE nlohmann_json::nlohmann_json
             ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
             ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
             ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
