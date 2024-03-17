@@ -24,10 +24,14 @@ std::string CHWirePTHandler::HandleUpstreamData(std::string buffer, ssize_t buff
     }
     else if (packet_type == 1)
     {
+        (*exec_context)["query_correlation_id"] = (*exec_context)["correlation_id"];
+        (*exec_context)["query_start_time"] = std::chrono::high_resolution_clock::now();
         parser->parseClientQuery(temp, buffer_length, exec_context);
+    } else if (packet_type == 2) {
+//        parser->LogResponse((char *) buffer.c_str(), buffer_length, "Client");
     }
 
-    parser->LogResponse((char *) buffer.c_str(), buffer_length);
+
     return buffer;
 }
 
@@ -40,7 +44,27 @@ std::string CHWirePTHandler::HandleDownStreamData(std::string buffer, ssize_t bu
 {
     LOG_INFO("Received a Server packet..................... ");
     LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
-    LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
+
+    QueryType queryType;
+    uint64_t packet_type = 0;
+    char * temp = &buffer[0];
+
+    readVarUInt(packet_type, temp);
+    LOG_INFO("Packet Type = " + std::to_string((int) packet_type));
+    if (packet_type == 1) {
+        std::cout << "Data Packet" << std::endl;
+        parser->LogResponse((char *) buffer.c_str(), buffer_length, "Server");
+    } else if (packet_type == 5)
+    {
+        std::string query_correlation_id = std::any_cast<std::string>((*exec_context)["query_correlation_id"]);
+        auto query_start_time = std::any_cast<std::chrono::high_resolution_clock::time_point>((*exec_context)["query_start_time"]);
+        auto query_end_time = std::any_cast<std::chrono::high_resolution_clock::time_point>((*exec_context)["request_stop_time"]);
+        auto target_host = std::any_cast<std::string>((*exec_context)["target_host"]);
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(query_end_time - query_start_time);
+        LOG_LATENCY(
+                query_correlation_id,
+                std::to_string(duration.count()) + "," + target_host)
+    }
 
     return buffer;
 }
