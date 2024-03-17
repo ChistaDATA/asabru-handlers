@@ -11,7 +11,7 @@ std::string CHttpHandler::HandleUpstreamData(std::string buffer, ssize_t buffer_
     LOG_INFO("Received a Client packet..................... ");
     LOG_INFO("Length of Packet is " + std::to_string(buffer_length) );
     LOG_INFO("Packet Type = " + std::to_string((int) *((unsigned char *)buffer.c_str())) );
-    std::string correlation_id = (char *) (*exec_context)["correlation_id"];
+    std::string correlation_id = std::any_cast<std::string>((*exec_context)["correlation_id"]);
     std::string request_string = buffer;
     simple_http_server::HttpRequest request;
     if (!request_string.empty()) {
