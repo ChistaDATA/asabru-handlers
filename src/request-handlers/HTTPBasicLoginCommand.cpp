@@ -5,9 +5,6 @@
 #include "HTTPBasicLoginCommand.h"
 #include "AuthenticationStrategy.h"
 
-// Mutex for thread safety
-std::mutex coutMutex;
-
 extern "C" HTTPBasicLoginCommand *createHTTPBasicLoginCommand()
 {
     return new HTTPBasicLoginCommand;
