@@ -6,9 +6,6 @@
 #include "AuthenticationStrategy.h"
 #include "ComputationContext.h"
 
-// Mutex for thread safety
-std::mutex coutMutex;
-
 extern "C" HTTPBasicIsAuthenticatedCommand *createHTTPBasicIsAuthenticatedCommand()
 {
     return new HTTPBasicIsAuthenticatedCommand;
