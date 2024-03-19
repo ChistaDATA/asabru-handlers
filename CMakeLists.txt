@@ -64,6 +64,8 @@ ENDMACRO()
 
 HEADER_DIRECTORIES("../asabru-commons/src/*.h" header_dir_list)
 include_directories(${header_dir_list})
+HEADER_DIRECTORIES("../asabru-commons/src/authentication/*.h" header_dir_list)
+include_directories(${header_dir_list})
 HEADER_DIRECTORIES("../asabru-engine/src/*.h" header_dir_list)
 include_directories(${header_dir_list})
 
