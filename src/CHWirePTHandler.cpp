@@ -1,6 +1,7 @@
 #include "CServerSocket.h"
 #include "CProxyHandler.h"
 #include "CHWirePTHandler.h"
+#include <any>
 
 /**
  * Function that handles upstream data
@@ -61,9 +62,6 @@ std::string CHWirePTHandler::HandleDownStreamData(std::string buffer, ssize_t bu
         auto query_end_time = std::any_cast<std::chrono::high_resolution_clock::time_point>((*exec_context)["request_stop_time"]);
         auto target_host = std::any_cast<std::string>((*exec_context)["target_host"]);
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(query_end_time - query_start_time);
-        LOG_LATENCY(
-                query_correlation_id,
-                std::to_string(duration.count()) + "," + target_host)
     }
 
     return buffer;
