@@ -53,8 +53,8 @@ std::string CHWirePTHandler::HandleDownStreamData(std::string buffer, ssize_t bu
     readVarUInt(packet_type, temp);
     LOG_INFO("Packet Type = " + std::to_string((int) packet_type));
     if (packet_type == 1) {
-        std::cout << "Data Packet" << std::endl;
-        parser->LogResponse((char *) buffer.c_str(), buffer_length, "Server");
+//        std::cout << "Data Packet" << std::endl;
+//        parser->LogResponse((char *) buffer.c_str(), buffer_length, "Server");
     } else if (packet_type == 5)
     {
         std::string query_correlation_id = std::any_cast<std::string>((*exec_context)["query_correlation_id"]);

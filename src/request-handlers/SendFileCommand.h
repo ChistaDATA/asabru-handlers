@@ -4,6 +4,6 @@
 #include "http_message.h"
 #include <fstream>
 
-class SendHtmlCommand: BaseComputationCommand {
+class SendFileCommand: BaseComputationCommand {
     bool Execute(ComputationContext* context) override;
 };
