@@ -26,9 +26,7 @@ std::string CHttpsHandler::HandleUpstreamData(std::string buffer, ssize_t buffer
         LOG_INFO(std::string("QUERY : ") + request.content());
     }
 
-    std::string result;
-    result.assign(buffer, buffer_length);
-    return result;
+    return buffer;
 }
 
 /**
@@ -42,9 +40,7 @@ std::string CHttpsHandler::HandleDownStreamData(std::string buffer, ssize_t buff
     std::cout << "Length of Packet is " << buffer_length << std::endl;
     std::cout << "Packet Type = " << (int)*((unsigned char *)buffer.c_str()) << std::endl;
 
-    std::string result;
-    result.assign(buffer, buffer_length);
-    return result;
+    return buffer;
 }
 
 extern "C" CHttpsHandler *createCHttpsHandler()
