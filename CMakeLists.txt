@@ -37,13 +37,9 @@ find_package (SQLite3 REQUIRED)
 include_directories(${SQLite3_INCLUDE_DIRS})
 
 include_directories(../libuv/include)
+include_directories(../nlohmann_json/single_include)
 include_directories(../gzip-hpp/include)
 include_directories(../asabru-parsers/src)
-
-include(FetchContent)
-
-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
-FetchContent_MakeAvailable(json)
 
 # Set source directory
 set(SOURCE_DIRECTORY "src")
@@ -85,7 +81,6 @@ foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
             PUBLIC ${Python_LIBRARIES}
             PUBLIC ${SQLite3_LIBRARIES}
             PUBLIC ${ZLIB_LIBRARIES}
-            PRIVATE nlohmann_json::nlohmann_json
             ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
             ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
             ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
