@@ -36,6 +36,7 @@ find_package(OpenSSL REQUIRED)
 find_package (SQLite3 REQUIRED)
 include_directories(${SQLite3_INCLUDE_DIRS})
 
+include_directories(../stduuid/include)
 include_directories(../libuv/include)
 include_directories(../nlohmann_json/single_include)
 include_directories(../gzip-hpp/include)
