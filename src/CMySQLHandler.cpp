@@ -1,12 +1,7 @@
-#include "CProxyHandler.h"
 #include "CMySQLHandler.h"
+#include "CProxyHandler.h"
+#include "CServerSocket.h"
 
-extern "C" CMySQLHandler *createCMySQLHandler()
-{
-    return new CMySQLHandler;
-}
+extern "C" CMySQLHandler *createCMySQLHandler() { return new CMySQLHandler; }
 
-extern "C" void destroyCMySQLHandler(CMySQLHandler *c)
-{
-    delete c;
-}
+extern "C" void destroyCHWirePTHandler(CMySQLHandler *c) { delete c; }
