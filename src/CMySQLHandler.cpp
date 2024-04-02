@@ -108,13 +108,17 @@ std::string extract_query_from_query_command(uint32_t capabilities, std::string 
 		uint64_t parameter_count = readMySQLLengthEncodedInt(buffer, pos);
 		pos++; // skip length of encoding byte
 		if (parameter_count_length > 1) {
-			pos += parameter_count_length; // skip length of parameter_set_count if length is greater than 1 byte
+			// skip length of parameter_set_count if length is greater than 1 byte
+			// in cases where length = 1, the value in that byte itself will be the length
+			pos += parameter_count_length;
 		}
 
 		uint8_t parameter_set_count_length = readMySQLEncodedLength(buffer, pos);
 		pos++; // skip length of encoding byte
 		if (parameter_set_count_length > 1) {
-			pos += parameter_set_count_length; // skip length of parameter_set_count if length is greater than 1 byte
+			// skip length of parameter_set_count if length is greater than 1 byte
+			// in cases where length = 1, the value in that byte itself will be the length
+			pos += parameter_set_count_length;
 		}
 
 		if (parameter_count > 0) {
@@ -130,7 +134,9 @@ std::string extract_query_from_query_command(uint32_t capabilities, std::string 
 					uint8_t parameter_name_length = readMySQLEncodedLength(buffer, pos);
 					pos++; // skip length of encoding byte
 					if (parameter_name_length > 1) {
-						pos += parameter_name_length; // skip length of parameter name if length is greater than 1 byte
+						// skip length of parameter name if length is greater than 1 byte
+						// in cases where length = 1, the value in that byte itself will be the length
+						pos += parameter_name_length;
 					}
 				}
 			}
@@ -138,7 +144,9 @@ std::string extract_query_from_query_command(uint32_t capabilities, std::string 
 			uint8_t parameter_values_length = readMySQLEncodedLength(buffer, pos);
 			pos++; // skip length of encoding byte
 			if (parameter_values_length > 1) {
-				pos += parameter_values_length; // skip length of parameter name if length is greater than 1 byte
+				// skip length of parameter values if length is greater than 1 byte
+				// in cases where length = 1, the value in that byte itself will be the length
+				pos += parameter_values_length;
 			}
 		}
 	}
