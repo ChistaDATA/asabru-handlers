@@ -3,7 +3,6 @@
 #include "CServerSocket.h"
 #include "Logger.h"
 #include "ProtocolHelper.h"
-#include "uuid/UuidGenerator.h"
 
 extern "C" CMySQLHandler *createCMySQLHandler() { return new CMySQLHandler; }
 
@@ -183,21 +182,13 @@ std::string CMySQLHandler::HandleUpstreamData(std::string buffer, ssize_t buffer
 	const char command_type = buffer[start];
 	switch (command_type) {
 	case COM_QUERY: {
-		auto query_start_time = std::chrono::high_resolution_clock::now();
-		(*exec_context)["query_start_time"] = query_start_time;
-		// set correlation_id in exec_context
-		std::string query_correlation_id = UuidGenerator::generateUuid();
-		(*exec_context)["query_correlation_id"] = query_correlation_id;
+		std::string query_correlation_id = std::any_cast<std::string>((*exec_context)["correlation_id"]);
 		const std::string query = extract_query_from_query_command(capabilities, buffer, start);
 		LOG_QUERY(query_correlation_id, query);
 		break;
 	}
 	case COM_STMT_PREPARE: {
-		auto query_start_time = std::chrono::high_resolution_clock::now();
-		(*exec_context)["query_start_time"] = query_start_time;
-		// set correlation_id in exec_context
-		std::string query_correlation_id = UuidGenerator::generateUuid();
-		(*exec_context)["query_correlation_id"] = query_correlation_id;
+		std::string query_correlation_id = std::any_cast<std::string>((*exec_context)["correlation_id"]);
 		const std::string query = extract_query_from_prepare_command(buffer, start);
 		LOG_QUERY(query_correlation_id, query);
 		break;
@@ -212,15 +203,5 @@ std::string CMySQLHandler::HandleUpstreamData(std::string buffer, ssize_t buffer
  * @param length - length of the buffer
  */
 std::string CMySQLHandler::HandleDownStreamData(std::string buffer, ssize_t buffer_length, EXECUTION_CONTEXT *exec_context) {
-	if (!exec_context->contains("query_correlation_id")) {
-		return buffer;
-	}
-	std::string query_correlation_id = std::any_cast<std::string>((*exec_context)["query_correlation_id"]);
-	auto query_start_time = std::any_cast<std::chrono::high_resolution_clock::time_point>((*exec_context)["query_start_time"]);
-	auto query_stop_time = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(query_stop_time - query_start_time);
-	auto target_host = std::any_cast<std::string>((*exec_context)["target_host"]);
-	LOG_LATENCY(query_correlation_id, std::to_string(duration.count()) + "," + target_host);
-	exec_context->erase("query_correlation_id");
 	return buffer;
 }
