@@ -1,7 +1,6 @@
 #include "CMongoDBHandler.h"
 #include <cstring>
 #include <string>
-#include "util/endian.h"
 #include "nlohmann/json.hpp"
 #include "ProtocolHelper.h"
 
