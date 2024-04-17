@@ -9,6 +9,12 @@
 enum PostgreSQLClientMessageType { MsgTypeQuery = 'Q', MsgTypeParse = 'P' };
 enum PostgreSQLServerMessageType { MsgTypeRowDescription = 'T' };
 
+enum PostgreSQLRequestCode {
+	RequestCodeCancel = 80877102,
+	RequestCodeSSL = 80877103,
+	RequestCodeGSSENC = 80877104,
+};
+
 class CPostgreSQLHandler : public BaseProxyHandler {
   public:
 	CPostgreSQLHandler() {}
