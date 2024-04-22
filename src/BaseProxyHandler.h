@@ -1,12 +1,12 @@
 #pragma once
 
-#include "CServerSocket.h"
-#include "CProxyHandler.h"
+#include "socket/CServerSocket.h"
+#include "interface/CProxyHandler.h"
 #include "LineGrabber.h"
 #include "CommonTypes.h"
 #include "Utils.h"
 #include <map>
-#include "Logger.h"
+#include "logger/Logger.h"
 
 class BaseProxyHandler : public CProxyHandler
 {

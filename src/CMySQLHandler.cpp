@@ -1,3 +1,4 @@
+#include "interface/CProxyHandler.h"
 #include "CMySQLHandler.h"
 #include "CProxyHandler.h"
 #include "CServerSocket.h"

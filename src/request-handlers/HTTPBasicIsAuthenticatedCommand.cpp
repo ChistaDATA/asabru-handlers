@@ -3,7 +3,7 @@
 //
 
 #include "HTTPBasicIsAuthenticatedCommand.h"
-#include "AuthenticationStrategy.h"
+#include "authentication/AuthenticationStrategy.h"
 #include "ComputationContext.h"
 
 extern "C" HTTPBasicIsAuthenticatedCommand *createHTTPBasicIsAuthenticatedCommand()

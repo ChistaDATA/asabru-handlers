@@ -3,7 +3,7 @@
 //
 
 #include "HTTPBasicLoginCommand.h"
-#include "AuthenticationStrategy.h"
+#include "authentication/AuthenticationStrategy.h"
 
 extern "C" HTTPBasicLoginCommand *createHTTPBasicLoginCommand()
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseComputationCommand.h"
 #include "ComputationContext.h"
-#include "http_message.h"
+#include "http/http_message.h"
 #include <fstream>
 
 class PythonCommand: BaseComputationCommand {

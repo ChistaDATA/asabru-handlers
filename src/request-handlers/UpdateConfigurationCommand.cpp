@@ -1,5 +1,5 @@
 #include "UpdateConfigurationCommand.h"
-#include "Logger.h"
+#include "logger/Logger.h"
 
 extern "C" UpdateConfigurationCommand *createUpdateConfigurationCommand()
 {

@@ -1,5 +1,4 @@
 #include "CMongoDBHandler.h"
-#include <cstring>
 #include <string>
 #include "nlohmann/json.hpp"
 #include "ProtocolHelper.h"
