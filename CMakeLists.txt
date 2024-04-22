@@ -17,6 +17,9 @@ endif ()
 # Set DEBUG preprocessor flag
 add_compile_definitions(DEBUG)
 
+# add dependencies
+include(cmake/CPM.cmake)
+
 # Find zlib
 find_package(ZLIB)
 
@@ -36,10 +39,72 @@ find_package(OpenSSL REQUIRED)
 find_package (SQLite3 REQUIRED)
 include_directories(${SQLite3_INCLUDE_DIRS})
 
-include_directories(../libuv/include)
-include_directories(../nlohmann_json/single_include)
-include_directories(../gzip-hpp/include)
-include_directories(../asabru-parsers/src)
+CPMAddPackage(
+        NAME gzip_hpp
+        GITHUB_REPOSITORY mapbox/gzip-hpp
+        GIT_TAG 7546b35
+        DOWNLOAD_ONLY YES
+)
+
+if (ASABRU_COMMONS_BUILD STREQUAL "GIT_TAG")
+    CPMAddPackage(
+            NAME asabru_commons
+            GITHUB_REPOSITORY ChistaDATA/asabru-commons
+            GIT_TAG ${ASABRU_COMMONS_GIT_TAG}
+    )
+elseif (ASABRU_COMMONS_BUILD STREQUAL "LOCAL_DIR")
+    # For development purpose
+    CPMAddPackage(
+            NAME asabru_commons
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../asabru-commons/src
+    )
+else()
+    CPMAddPackage(
+            NAME asabru_commons
+            GITHUB_REPOSITORY ChistaDATA/asabru-commons
+            VERSION 0.0.2
+    )
+endif()
+
+if (ASABRU_ENGINE_BUILD STREQUAL "GIT_TAG")
+    CPMAddPackage(
+            NAME asabru_engine
+            GITHUB_REPOSITORY ChistaDATA/asabru-engine
+            GIT_TAG ${ASABRU_ENGINE_GIT_TAG}
+    )
+elseif (ASABRU_ENGINE_BUILD STREQUAL "LOCAL_DIR")
+    # For development purpose
+    CPMAddPackage(
+            NAME asabru_engine
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../asabru-engine/src
+    )
+else()
+    CPMAddPackage(
+            NAME asabru_engine
+            GITHUB_REPOSITORY ChistaDATA/asabru-engine
+            VERSION 0.0.2
+    )
+endif()
+
+if (ASABRU_PARSERS_BUILD STREQUAL "GIT_TAG")
+    CPMAddPackage(
+            NAME asabru_parsers
+            GITHUB_REPOSITORY ChistaDATA/asabru-parsers
+            GIT_TAG ${ASABRU_PARSERS_GIT_TAG}
+    )
+elseif (ASABRU_PARSERS_BUILD STREQUAL "LOCAL_DIR")
+    # For development purpose
+    CPMAddPackage(
+            NAME asabru_parsers
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../asabru-parsers/src
+    )
+else()
+    CPMAddPackage(
+            NAME asabru_parsers
+            GITHUB_REPOSITORY ChistaDATA/asabru-parsers
+            VERSION 0.0.1
+    )
+endif()
 
 # Set source directory
 set(SOURCE_DIRECTORY "src")
@@ -48,24 +113,6 @@ file(GLOB_RECURSE PLUGIN_SOURCES "${SOURCE_DIRECTORY}/*.cpp" "${SOURCE_DIRECTORY
 file(COPY src/python-handlers DESTINATION .)
 # Add build directory
 set(BUILD_DIRECTORY "build")
-
-MACRO(HEADER_DIRECTORIES search_path return_list)
-    FILE(GLOB_RECURSE new_list ${search_path})
-    SET(dir_list "")
-    FOREACH(file_path ${new_list})
-        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
-        SET(dir_list ${dir_list} ${dir_path})
-    ENDFOREACH()
-    LIST(REMOVE_DUPLICATES dir_list)
-    SET(${return_list} ${dir_list})
-ENDMACRO()
-
-HEADER_DIRECTORIES("../asabru-commons/src/*.h" header_dir_list)
-include_directories(${header_dir_list})
-HEADER_DIRECTORIES("../asabru-commons/src/authentication/*.h" header_dir_list)
-include_directories(${header_dir_list})
-HEADER_DIRECTORIES("../asabru-engine/src/*.h" header_dir_list)
-include_directories(${header_dir_list})
 
 foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
     get_filename_component(FILE_NAME ${PLUGIN_SOURCE} NAME)
@@ -81,9 +128,15 @@ foreach (PLUGIN_SOURCE ${PLUGIN_SOURCES})
             PUBLIC ${Python_LIBRARIES}
             PUBLIC ${SQLite3_LIBRARIES}
             PUBLIC ${ZLIB_LIBRARIES}
-            ${CMAKE_SOURCE_DIR}/../libuv/build/libuv.a
-            ${CMAKE_SOURCE_DIR}/../asabru-commons/build/lib/libasabru_commons.a
-            ${CMAKE_SOURCE_DIR}/../asabru-engine/build/lib/libasabru_engine.a
-            ${CMAKE_SOURCE_DIR}/../asabru-parsers/build/lib/libasabru_parsers.a
+            uv
+            asabru_commons
+            asabru_engine
+            asabru_parsers
+    )
+
+    target_include_directories(${LIB_NAME}
+            PUBLIC ${asabru_engine_SOURCE_DIR}/src
+            PUBLIC ${asabru_parsers_SOURCE_DIR}/src
+            PUBLIC ${gzip_hpp_SOURCE_DIR}/include
     )
 endforeach (PLUGIN_SOURCE ${PLUGIN_SOURCES})

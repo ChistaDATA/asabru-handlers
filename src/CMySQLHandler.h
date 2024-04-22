@@ -1,6 +1,7 @@
 #ifndef CH_MYSQL_PROTOCOL_HANDLER_H
 #define CH_MYSQL_PROTOCOL_HANDLER_H
 
+#include "socket/CServerSocket.h"
 #include "BaseProxyHandler.h"
 #include "CServerSocket.h"
 

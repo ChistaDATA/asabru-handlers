@@ -1,7 +1,7 @@
 #include "CPostgreSQLHandler.h"
-#include "CProxyHandler.h"
-#include "CServerSocket.h"
-#include "Logger.h"
+#include "interface/CProxyHandler.h"
+#include "socket/CServerSocket.h"
+#include "logger/Logger.h"
 #include <cstring>
 #include <string>
 

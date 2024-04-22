@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CServerSocket.h"
-#include "CProxyHandler.h"
+#include "socket/CServerSocket.h"
+#include "interface/CProxyHandler.h"
 #include "BaseProxyHandler.h"
 
 class CHttpsHandler : public BaseProxyHandler

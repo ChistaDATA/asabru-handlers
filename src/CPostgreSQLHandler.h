@@ -1,7 +1,7 @@
 #ifndef POSTGRESQL_PROTOCOL_HANDLER_H
 #define POSTGRESQL_PROTOCOL_HANDLER_H
 #include "BaseProxyHandler.h"
-#include "CServerSocket.h"
+#include "socket/CServerSocket.h"
 
 #define MSG_LENGTH_LEN 4
 #define NULL_CHAR '\0'

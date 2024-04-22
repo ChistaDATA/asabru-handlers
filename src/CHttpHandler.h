@@ -1,10 +1,10 @@
 #pragma once
 
-#include "CProxyHandler.h"
-#include "CHttpParser.h"
 #include "BaseProxyHandler.h"
+#include "CHttpParser.h"
 #include "Utils.h"
-#include "http_message.h"
+#include "http/http_message.h"
+#include "interface/CProxyHandler.h"
 #include <map>
 
 class CHttpHandler : public BaseProxyHandler

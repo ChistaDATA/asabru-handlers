@@ -3,7 +3,7 @@
 //
 
 #include "HTTPBasicLogoutCommand.h"
-#include "AuthenticationStrategy.h"
+#include "authentication/AuthenticationStrategy.h"
 
 extern "C" HTTPBasicLogoutCommand *createHTTPBasicLogoutCommand()
 {
