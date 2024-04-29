@@ -3,10 +3,10 @@
 //
 #include <sstream>
 
-#include "AuthenticationStrategy.h"
-#include "CClientSocket.h"
+#include "authentication/AuthenticationStrategy.h"
+#include "socket/CClientSocket.h"
 #include "HTTPRequestCommand.h"
-#include "Logger.h"
+#include "logger/Logger.h"
 
 extern "C" HTTPRequestCommand *createHTTPRequestCommand() {
   return new HTTPRequestCommand;

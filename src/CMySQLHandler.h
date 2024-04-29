@@ -3,7 +3,6 @@
 
 #include "socket/CServerSocket.h"
 #include "BaseProxyHandler.h"
-#include "CServerSocket.h"
 
 // Values for the capabilities flag bitmask used by the MySQL protocol.
 enum MySQLCapabalities {

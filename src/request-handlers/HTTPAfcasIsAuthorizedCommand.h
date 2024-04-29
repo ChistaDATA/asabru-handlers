@@ -7,6 +7,6 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-class HTTPRequestCommand: BaseComputationCommand {
-  bool Execute(ComputationContext* context) override;
+class HTTPAfcasIsAuthorizedCommand: BaseComputationCommand {
+    bool Execute(ComputationContext* context) override;
 };
