@@ -19,7 +19,7 @@ extern "C" void destroyHTTPBasicIsAuthenticatedCommand(HTTPBasicIsAuthenticatedC
 
 bool HTTPBasicIsAuthenticatedCommand::Execute(ComputationContext *context) {
     auto *request = std::any_cast<const simple_http_server::HttpRequest *>(context->Get("request"));
-    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get(AUTHENTICATION_KEY));
+    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get(AUTHENTICATION_STRATEGY_KEY));
     auto token = request->header("Authorization");
     if (token.empty()) {
         context->Put(AUTH_AUTHENTICATED_KEY, false);

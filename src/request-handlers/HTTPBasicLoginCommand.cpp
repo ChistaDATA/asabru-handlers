@@ -24,7 +24,7 @@ bool HTTPBasicLoginCommand::Execute(ComputationContext *context) {
     std::string username = body[AUTH_BASIC_USERNAME_KEY].get<std::string>();
     std::string password = body[AUTH_BASIC_PASSWORD_KEY].get<std::string>();
 
-    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get(AUTHENTICATION_KEY));
+    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get(AUTHENTICATION_STRATEGY_KEY));
     ComputationContext auth_context;
     auth_context.Put(AUTH_BASIC_USERNAME_KEY, username);
     auth_context.Put(AUTH_BASIC_PASSWORD_KEY, password);

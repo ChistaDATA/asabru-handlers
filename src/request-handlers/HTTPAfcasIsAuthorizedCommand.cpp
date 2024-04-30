@@ -36,7 +36,7 @@ std::vector<Predicate> parseAfcasAuthorizationData(const std::string &data, Comp
         LOG_ERROR(error);
         throw std::runtime_error(error);
     }
-    
+
 	tinyxml2::XMLElement *predicatesElement = rootElement->FirstChildElement("predicates");
 	if (!predicatesElement) {
 		auto error = "Error parsing afcas data: predicates element not found";
@@ -60,7 +60,7 @@ std::vector<Predicate> parseAfcasAuthorizationData(const std::string &data, Comp
 
 bool HTTPAfcasIsAuthorizedCommand::Execute(ComputationContext *context) {
 	auto *request = std::any_cast<const simple_http_server::HttpRequest *>(context->Get("request"));
-	auto *auth = std::any_cast<AuthorizationStrategy *>(context->Get(AUTHORIZATION_KEY));
+	auto *auth = std::any_cast<AuthorizationStrategy *>(context->Get(AUTHORIZATION_STRATEGY_KEY));
 
 	auto data = std::any_cast<std::string>(context->Get(AUTHORIZATION_DATA_KEY));
 	auto predicates = parseAfcasAuthorizationData(data, context);
