@@ -20,3 +20,12 @@ cd build
 cmake ..
 make
 ```
+
+#### Build with local dependencies
+
+```
+mkdir build
+cd build
+cmake -DASABRU_COMMONS_BUILD=LOCAL_DIR -DASABRU_ENGINE_BUILD=LOCAL_DIR -DASABRU_PARSERS_BUILD=LOCAL_DIR ..
+make
+```

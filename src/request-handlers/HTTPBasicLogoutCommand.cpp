@@ -4,6 +4,7 @@
 
 #include "HTTPBasicLogoutCommand.h"
 #include "authentication/AuthenticationStrategy.h"
+#include "authentication/BasicAuthenticationStrategy.h"
 
 extern "C" HTTPBasicLogoutCommand *createHTTPBasicLogoutCommand()
 {
@@ -20,12 +21,12 @@ bool HTTPBasicLogoutCommand::Execute(ComputationContext *context)
     auto *request = std::any_cast<const simple_http_server::HttpRequest *>(context->Get("request"));
     auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
 
-    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get("authentication"));
+    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get(AUTHENTICATION_STRATEGY_KEY));
 
     auto token = request->header("Authorization");
     if (token.empty())
     {
-        context->Put("authenticated", false);
+        context->Put(AUTH_AUTHENTICATED_KEY, false);
         return true;
     }
 
@@ -35,12 +36,12 @@ bool HTTPBasicLogoutCommand::Execute(ComputationContext *context)
     }
     else
     {
-        context->Put("authenticated", false);
+        context->Put(AUTH_AUTHENTICATED_KEY, false);
         return true;
     }
 
     ComputationContext auth_context;
-    auth_context.Put("token", token);
+    auth_context.Put(AUTH_BASIC_TOKEN_KEY, token);
     auth->removeAuthentication(&auth_context);
 
     response->SetHeader("Content-Type", "application/json");

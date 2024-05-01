@@ -56,7 +56,7 @@ elseif (ASABRU_COMMONS_BUILD STREQUAL "LOCAL_DIR")
     # For development purpose
     CPMAddPackage(
             NAME asabru_commons
-            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../asabru-commons/src
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../asabru-commons/src
     )
 else()
     CPMAddPackage(
@@ -76,7 +76,7 @@ elseif (ASABRU_ENGINE_BUILD STREQUAL "LOCAL_DIR")
     # For development purpose
     CPMAddPackage(
             NAME asabru_engine
-            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../asabru-engine/src
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../asabru-engine/src
     )
 else()
     CPMAddPackage(
@@ -96,7 +96,7 @@ elseif (ASABRU_PARSERS_BUILD STREQUAL "LOCAL_DIR")
     # For development purpose
     CPMAddPackage(
             NAME asabru_parsers
-            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../asabru-parsers/src
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../asabru-parsers/src
     )
 else()
     CPMAddPackage(

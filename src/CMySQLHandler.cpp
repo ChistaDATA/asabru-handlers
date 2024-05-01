@@ -1,8 +1,7 @@
 #include "interface/CProxyHandler.h"
 #include "CMySQLHandler.h"
-#include "CProxyHandler.h"
-#include "CServerSocket.h"
-#include "Logger.h"
+#include "socket/CServerSocket.h"
+#include "logger/Logger.h"
 #include "ProtocolHelper.h"
 
 extern "C" CMySQLHandler *createCMySQLHandler() { return new CMySQLHandler; }

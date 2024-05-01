@@ -4,6 +4,7 @@
 
 #include "HTTPBasicLoginCommand.h"
 #include "authentication/AuthenticationStrategy.h"
+#include "authentication/BasicAuthenticationStrategy.h"
 
 extern "C" HTTPBasicLoginCommand *createHTTPBasicLoginCommand()
 {
@@ -20,16 +21,16 @@ bool HTTPBasicLoginCommand::Execute(ComputationContext *context) {
     auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
     
     nlohmann::json body = nlohmann::json::parse(request->content());
-    std::string username = body["username"].get<std::string>();
-    std::string password = body["password"].get<std::string>();
+    std::string username = body[AUTH_BASIC_USERNAME_KEY].get<std::string>();
+    std::string password = body[AUTH_BASIC_PASSWORD_KEY].get<std::string>();
 
-    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get("authentication"));
+    auto *auth = std::any_cast<AuthenticationStrategy *>(context->Get(AUTHENTICATION_STRATEGY_KEY));
     ComputationContext auth_context;
-    auth_context.Put("username", username);
-    auth_context.Put("password", password);
+    auth_context.Put(AUTH_BASIC_USERNAME_KEY, username);
+    auth_context.Put(AUTH_BASIC_PASSWORD_KEY, password);
     auth->authenticate(&auth_context);
 
-    auto authenticated = std::any_cast<bool>(auth_context.Get("authenticated"));
+    auto authenticated = std::any_cast<bool>(auth_context.Get(AUTH_AUTHENTICATED_KEY));
     if (!authenticated) {
         response->SetStatusCode(simple_http_server::HttpStatusCode::Unauthorized);
         response->SetHeader("Content-Type", "application/json");
@@ -38,7 +39,7 @@ bool HTTPBasicLoginCommand::Execute(ComputationContext *context) {
         return false;
     }
 
-    std::string token = std::any_cast<std::string>(auth_context.Get("token"));
+    std::string token = std::any_cast<std::string>(auth_context.Get(AUTH_BASIC_TOKEN_KEY));
     nlohmann::json response_content;
     response_content["token"] = token;
 
