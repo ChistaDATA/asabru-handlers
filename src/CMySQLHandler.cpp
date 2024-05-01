@@ -1,4 +1,3 @@
-#include "interface/CProxyHandler.h"
 #include "CMySQLHandler.h"
 #include "socket/CServerSocket.h"
 #include "logger/Logger.h"
