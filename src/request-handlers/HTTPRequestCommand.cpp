@@ -31,6 +31,10 @@ bool HTTPRequestCommand::Execute(ComputationContext *context) {
   std::string content = std::any_cast<std::string>(context->Get("content"));
   request.SetContent(content);
 
+  //"multipart/form-data; boundary=" + boundary //get it from client side
+  std::string content_type= std::any_cast<std::string>(context->Get("content_type"));
+  request.SetHeader("Content-Type",content_type );
+
   auto requestStr = simple_http_server::to_string(request);
   CClientSocket *clientSocket = new CClientSocket(host, port);
   clientSocket->SendBytes((void *)requestStr.c_str(), requestStr.size());
