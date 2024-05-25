@@ -4,7 +4,7 @@
 #include "socket/SocketSelect.h"
 #include "logger/Logger.h"
 
-void *ProtocolPipeline(CProtocolSocket *ptr, void *lptr) {
+extern "C" void *CProtocolPipeline(CProtocolSocket *ptr, void *lptr) {
     LOG_INFO("Starting ProtocolPipeline");
     CLIENT_DATA clientData;
     memcpy(&clientData, lptr, sizeof(CLIENT_DATA));

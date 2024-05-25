@@ -31,6 +31,10 @@ bool HTTPRequestCommand::Execute(ComputationContext *context) {
   std::string content = std::any_cast<std::string>(context->Get("content"));
   request.SetContent(content);
 
+  std::string contentType = std::any_cast<std::string>(context->Get("content-type"));
+  if (!contentType.empty())
+  	request.SetHeader("Content-Type", contentType);
+
   auto requestStr = simple_http_server::to_string(request);
   CClientSocket *clientSocket = new CClientSocket(host, port);
   clientSocket->SendBytes((void *)requestStr.c_str(), requestStr.size());
