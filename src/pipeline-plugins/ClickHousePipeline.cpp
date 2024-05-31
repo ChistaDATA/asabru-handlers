@@ -6,6 +6,7 @@
 
 extern "C" void *ClickHousePipeline(CProxySocket *ptr, void *lptr)
 {
+	LOG_INFO("ClickHousePipeline::start");
     CLIENT_DATA clientData;
     memcpy(&clientData, lptr, sizeof(CLIENT_DATA));
 
@@ -135,15 +136,15 @@ extern "C" void *ClickHousePipeline(CProxySocket *ptr, void *lptr)
 
             // Close the client socket
             LOG_INFO("Closing the client socket");
-            client_socket->Close();
             delete client_socket;
             break;
         }
     }
     // Close the server socket
     LOG_INFO("Closing the target socket");
-    target_socket->Close();
     delete target_socket;
+
+	LOG_INFO("ClickHousePipeline::end");
 #ifdef WINDOWS_OS
     return 0;
 #else
