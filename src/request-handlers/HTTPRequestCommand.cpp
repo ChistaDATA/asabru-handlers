@@ -39,6 +39,14 @@ bool HTTPRequestCommand::Execute(ComputationContext *context) {
 		std::string buffer = clientSocket->ReceiveBytes();
 		simple_http_server::HttpResponse httpResponse = simple_http_server::string_to_response(buffer);
 
+
+    if (!httpResponse.content().empty()) {
+			context->Put("response_content", httpResponse.content());
+		}
+
+    int status_code = static_cast<int>(httpResponse.status_code());
+    context->Put("status_code", status_code);
+
 		if (httpResponse.status_code() >= simple_http_server::HttpStatusCode::BadRequest) {
 			std::string error_message =
 				"HTTP request failed with status code: " + std::to_string(static_cast<int>(httpResponse.status_code()));
@@ -46,11 +54,7 @@ bool HTTPRequestCommand::Execute(ComputationContext *context) {
 			return false;
 		}
 
-		if (!httpResponse.content().empty()) {
-			context->Put("response_content", httpResponse.content());
-		}
-
-		std::string response = "Successfully send request...\n";
+    std::string response = "Successfully send request...\n";
 		context->Put("response", response);
 
 		return true;
