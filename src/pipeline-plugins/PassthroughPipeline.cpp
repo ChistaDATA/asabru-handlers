@@ -4,7 +4,7 @@
 #include "socket/SocketSelect.h"
 #include "uuid/UuidGenerator.h"
 
-void *PassthroughPipeline(CProxySocket *ptr, void *lptr) {
+extern "C" void *PassthroughPipeline(CProxySocket *ptr, void *lptr) {
 	std::string correlation_id = UuidGenerator::generateUuid();
 	LOG_INFO("Correlation ID : " + correlation_id);
 	CLIENT_DATA clientData;
