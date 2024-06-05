@@ -91,9 +91,9 @@ extern "C" void *PassthroughPipeline(CProxySocket *ptr, void *lptr) {
 			still_connected = false;
 		}
 
+		// Delete Select from memory
+		delete sel;
 		if (!still_connected) {
-			// Delete Select from memory
-			delete sel;
 
 			// Close the client socket
 			client_socket->Close();
