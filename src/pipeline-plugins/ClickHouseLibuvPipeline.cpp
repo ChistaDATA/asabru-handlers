@@ -72,7 +72,7 @@ namespace clickhouse_pipeline {
     }
 }
 
-void *ClickHouseLibuvPipeline(LibuvProxySocket *ptr, void *lptr) {
+extern "C" void *ClickHouseLibuvPipeline(LibuvProxySocket *ptr, void *lptr) {
     std::cout << "ClickHouseLibuvPipeline : " << std::endl;
     CLIENT_DATA clientData;
     memcpy(&clientData, lptr, sizeof(CLIENT_DATA));

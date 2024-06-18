@@ -101,7 +101,7 @@ int MySQLHandshake(Connection *conn, EXECUTION_CONTEXT *exec_context) {
 	return 0;
 }
 
-void *MySQLPipeline(CProxySocket *ptr, void *lptr) {
+extern "C" void *MySQLPipeline(CProxySocket *ptr, void *lptr) {
 	LOG_INFO("MySQLPipeline::start");
 	CLIENT_DATA clientData;
 	memcpy(&clientData, lptr, sizeof(CLIENT_DATA));

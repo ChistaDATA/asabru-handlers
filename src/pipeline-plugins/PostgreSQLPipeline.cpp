@@ -3,13 +3,13 @@
 #include "ProtocolHelper.h"
 #include "interface/CProtocolSocket.h"
 #include "interface/CProxySocket.h"
+#include "logger/Logger.h"
 #include "socket/CClientSSLSocket.h"
 #include "socket/CClientSocket.h"
 #include "socket/Socket.h"
 #include "socket/SocketSelect.h"
 #include "uuid/UuidGenerator.h"
 #include <utility>
-#include "logger/Logger.h"
 
 #define RequestCodeSSL 80877103
 #define RequestCodeGSSENC 80877104
@@ -109,7 +109,7 @@ int PostgreSQLHandshake(Connection *conn, EXECUTION_CONTEXT *exec_context) {
 	return 0;
 }
 
-void *PostgreSQLPipeline(CProxySocket *ptr, void *lptr) {
+extern "C" void *PostgreSQLPipeline(CProxySocket *ptr, void *lptr) {
 	LOG_INFO("PostgreSQLPipeline::start");
 	CLIENT_DATA clientData;
 	memcpy(&clientData, lptr, sizeof(CLIENT_DATA));
