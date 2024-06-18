@@ -70,7 +70,7 @@ void SendEOF(Socket *client_socket) {
     client_socket->SendBytes((char *)&eof, sizeof(eof));
 }
 
-void *CStreamPipeline(CProtocolSocket *ptr, void *lptr) {
+extern "C" void *CStreamPipeline(CProtocolSocket *ptr, void *lptr) {
     LOG_INFO("Starting CStreamPipeline");
     CLIENT_DATA clientData;
     memcpy(&clientData, lptr, sizeof(CLIENT_DATA));
