@@ -49,63 +49,55 @@ extern "C" void *PassthroughPipeline(CProxySocket *ptr, void *lptr) {
 
 	auto start = std::chrono::high_resolution_clock::now();
 	while (true) {
-		SocketSelect *sel;
 		try {
-			sel = new SocketSelect(client_socket, target_socket, NonBlockingSocket);
+			SocketSelect sel(client_socket, target_socket, NonBlockingSocket);
+			bool still_connected = true;
+			try {
+				if (sel.Readable(client_socket)) {
+					LOG_INFO("client socket is readable, reading bytes : ");
+					std::string bytes = client_socket->ReceiveBytes();
+
+					if (!bytes.empty()) {
+						target_socket->SendBytes((char *)bytes.c_str(), bytes.size());
+					}
+
+					if (bytes.empty())
+						still_connected = false;
+				}
+			} catch (std::exception &e) {
+				LOG_ERROR("Error while sending to target " + std::string(e.what()));
+				still_connected = false;
+			}
+
+			try {
+				if (sel.Readable(target_socket)) {
+					LOG_INFO("target socket is readable, reading bytes : ");
+					std::string bytes = target_socket->ReceiveBytes();
+
+					LOG_INFO("Calling Proxy Downstream Handler..");
+					client_socket->SendBytes((char *)bytes.c_str(), bytes.size());
+
+					if (bytes.empty())
+						still_connected = false;
+				}
+			} catch (std::exception &e) {
+				LOG_ERROR("Error while sending to client " + std::string(e.what()));
+				still_connected = false;
+			}
+			if (!still_connected) {
+				break;
+			}
 		} catch (std::exception &e) {
 			LOG_ERROR(e.what());
 			LOG_ERROR("error occurred while creating socket select ");
-		}
-
-		bool still_connected = true;
-		try {
-			if (sel->Readable(client_socket)) {
-				LOG_INFO("client socket is readable, reading bytes : ");
-				std::string bytes = client_socket->ReceiveBytes();
-
-				if (!bytes.empty()) {
-					target_socket->SendBytes((char *)bytes.c_str(), bytes.size());
-				}
-
-				if (bytes.empty())
-					still_connected = false;
-			}
-		} catch (std::exception &e) {
-			LOG_ERROR("Error while sending to target " + std::string(e.what()));
-			still_connected = false;
-		}
-
-		try {
-			if (sel->Readable(target_socket)) {
-				LOG_INFO("target socket is readable, reading bytes : ");
-				std::string bytes = target_socket->ReceiveBytes();
-
-				LOG_INFO("Calling Proxy Downstream Handler..");
-				client_socket->SendBytes((char *)bytes.c_str(), bytes.size());
-
-				if (bytes.empty())
-					still_connected = false;
-			}
-		} catch (std::exception &e) {
-			LOG_ERROR("Error while sending to client " + std::string(e.what()));
-			still_connected = false;
-		}
-
-		// Delete Select from memory
-		delete sel;
-		if (!still_connected) {
-
-			// Close the client socket
-			client_socket->Close();
-			delete client_socket;
-			break;
 		}
 	}
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 	LOG_LATENCY(correlation_id, std::to_string(duration.count()));
+	// Close the client socket
+	delete client_socket;
 	// Close the server socket
-	target_socket->Close();
 	delete target_socket;
 #ifdef WINDOWS_OS
 	return 0;
