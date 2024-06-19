@@ -38,6 +38,7 @@ bool HTTPRequestCommand::Execute(ComputationContext *context) {
 
 		std::string buffer = clientSocket->ReceiveBytes();
 		simple_http_server::HttpResponse httpResponse = simple_http_server::string_to_response(buffer);
+		delete clientSocket;
 
 
     if (!httpResponse.content().empty()) {
