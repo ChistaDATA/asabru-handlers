@@ -68,7 +68,7 @@ extern "C" void *CProtocolPipeline(CProtocolSocket *ptr, void *lptr) {
 
 	// Close the client socket
 	LOG_INFO("Closing the client socket");
-	client_socket->Close();
+	delete client_socket;
 
 #ifdef WINDOWS_OS
 	return 0;
