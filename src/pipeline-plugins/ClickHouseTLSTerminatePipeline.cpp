@@ -23,7 +23,7 @@ extern "C" void *ClickHouseTLSTerminatePipeline(CProxySocket *ptr, void *lptr) {
 	// Check if handler is defined
 	CProxyHandler *proxy_handler = ptr->GetHandler();
 	if (proxy_handler == nullptr) {
-		std::cout << "The handler is not defined. Exiting!" << std::endl;
+		LOG_ERROR("The handler is not defined. Exiting!");
 		return nullptr;
 	}
 
@@ -45,57 +45,53 @@ extern "C" void *ClickHouseTLSTerminatePipeline(CProxySocket *ptr, void *lptr) {
 	ProtocolHelper::SetKeepAlive(target_socket->GetSocket(), 1);
 
 	while (true) {
-		SocketSelect *sel;
-
 		try {
-			sel = new SocketSelect(client_socket, target_socket, NonBlockingSocket);
+			SocketSelect sel(client_socket, target_socket, NonBlockingSocket);
+			bool still_connected = true;
+			try {
+				if (sel.Readable(client_socket)) {
+					LOG_INFO("client socket is readable, reading bytes : ")
+					std::string bytes = client_socket->ReceiveBytes();
+
+					LOG_INFO("Calling Proxy Upstream Handler..")
+					std::string response = proxy_handler->HandleUpstreamData(bytes, bytes.size(), &exec_context);
+					target_socket->SendBytes((char *)response.c_str(), response.size());
+
+					if (bytes.empty())
+						still_connected = false;
+				}
+			} catch (std::exception &e) {
+				LOG_ERROR("Error while sending to target " + std::string(e.what()));
+			}
+
+			try {
+				if (sel.Readable(target_socket)) {
+					LOG_INFO("target socket is readable, reading bytes : ")
+					std::string bytes = target_socket->ReceiveBytes();
+
+					LOG_INFO("Calling Proxy Downstream Handler..")
+					std::string response = proxy_handler->HandleDownStreamData(bytes, bytes.size(), &exec_context);
+					client_socket->SendBytes((char *)response.c_str(), response.size());
+
+					if (bytes.empty())
+						still_connected = false;
+				}
+			} catch (std::exception &e) {
+				LOG_ERROR("Error while sending to client " + std::string(e.what()));
+			}
+
+			if (!still_connected) {
+				break;
+			}
 		} catch (std::exception &e) {
-			std::cout << e.what() << std::endl;
 			LOG_ERROR("error occurred while creating socket select " + std::string(e.what()));
-		}
-
-		bool still_connected = true;
-		try {
-			if (sel->Readable(client_socket)) {
-				std::cout << "client socket is readable, reading bytes : " << std::endl;
-				std::string bytes = client_socket->ReceiveBytes();
-
-				std::cout << "Calling Proxy Upstream Handler.." << std::endl;
-				std::string response = proxy_handler->HandleUpstreamData(bytes, bytes.size(), &exec_context);
-				target_socket->SendBytes((char *)response.c_str(), response.size());
-
-				if (bytes.empty())
-					still_connected = false;
-			}
-		} catch (std::exception &e) {
-			LOG_ERROR("Error while sending to target " + std::string(e.what()));
-		}
-
-		try {
-			if (sel->Readable(target_socket)) {
-				std::cout << "target socket is readable, reading bytes : " << std::endl;
-				std::string bytes = target_socket->ReceiveBytes();
-
-				std::cout << "Calling Proxy Downstream Handler.." << std::endl;
-				std::string response = proxy_handler->HandleDownStreamData(bytes, bytes.size(), &exec_context);
-				client_socket->SendBytes((char *)response.c_str(), response.size());
-
-				if (bytes.empty())
-					still_connected = false;
-			}
-		} catch (std::exception &e) {
-			LOG_ERROR("Error while sending to client " + std::string(e.what()));
-		}
-
-		if (!still_connected) {
-			// Close the client socket
-			client_socket->Close();
-			break;
 		}
 	}
 
+	// Close the client socket
+	delete client_socket;
 	// Close the server socket
-	target_socket->Close();
+	delete target_socket;
 	LOG_INFO("::end");
 #ifdef WINDOWS_OS
 	return 0;
