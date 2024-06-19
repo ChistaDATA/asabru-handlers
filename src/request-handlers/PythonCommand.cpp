@@ -28,9 +28,9 @@ bool PythonCommand::Execute(ComputationContext *context) {
         pythonInterpreter.Execute("multiply", pythonComputationContext);
         auto content = std::any_cast<std::string>(pythonComputationContext->Get("response"));
 
-        auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
-        response->SetHeader("Content-Type", "text/plain");
-        response->SetContent(content);
+        simple_http_server::HttpResponse response(simple_http_server::HttpStatusCode::Ok);
+        response.SetHeader("Content-Type", "text/plain");
+        response.SetContent(content);
         context->Put("response", response);
 
         return true;
