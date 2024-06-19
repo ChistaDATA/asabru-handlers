@@ -18,7 +18,7 @@ extern "C" void destroyHTTPBasicLoginCommand(HTTPBasicLoginCommand *c)
 
 bool HTTPBasicLoginCommand::Execute(ComputationContext *context) {
     auto *request = std::any_cast<const simple_http_server::HttpRequest *>(context->Get("request"));
-    auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
+    simple_http_server::HttpResponse response(simple_http_server::HttpStatusCode::Ok);
     
     nlohmann::json body = nlohmann::json::parse(request->content());
     std::string username = body[AUTH_BASIC_USERNAME_KEY].get<std::string>();
@@ -32,9 +32,9 @@ bool HTTPBasicLoginCommand::Execute(ComputationContext *context) {
 
     auto authenticated = std::any_cast<bool>(auth_context.Get(AUTH_AUTHENTICATED_KEY));
     if (!authenticated) {
-        response->SetStatusCode(simple_http_server::HttpStatusCode::Unauthorized);
-        response->SetHeader("Content-Type", "application/json");
-        response->SetContent("Unauthorized");
+        response.SetStatusCode(simple_http_server::HttpStatusCode::Unauthorized);
+        response.SetHeader("Content-Type", "application/json");
+        response.SetContent("Unauthorized");
         context->Put("response", response);
         return false;
     }
@@ -43,8 +43,8 @@ bool HTTPBasicLoginCommand::Execute(ComputationContext *context) {
     nlohmann::json response_content;
     response_content["token"] = token;
 
-    response->SetHeader("Content-Type", "application/json");
-    response->SetContent(response_content.dump());
+    response.SetHeader("Content-Type", "application/json");
+    response.SetContent(response_content.dump());
     context->Put("response", response);
     return true;
 }

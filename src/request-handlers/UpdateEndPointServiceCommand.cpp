@@ -20,9 +20,9 @@ bool  UpdateEndPointServiceCommand::Execute(ComputationContext *context)
     if (functionAny.type() == typeid(std::string (*)(std::string))) {
         auto updateEndPointService = std::any_cast<std::string (*)(std::string)>(functionAny);
         std::string response_content = updateEndPointService(request->content());
-        auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
-        response->SetHeader("Content-Type", "text/plain");
-        response->SetContent(response_content);
+        simple_http_server::HttpResponse response(simple_http_server::HttpStatusCode::Ok);
+        response.SetHeader("Content-Type", "text/plain");
+        response.SetContent(response_content);
         context->Put("response", response);
         return true;
     } else {

@@ -18,7 +18,7 @@ bool SendFileCommand::Execute(ComputationContext *context) {
     auto *request = std::any_cast<const simple_http_server::HttpRequest *>(context->Get("request"));
     std::string request_path = request->uri().path();
     std::cout << "SendFileCommand :" << request_path << std::endl;
-    auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
+    auto response = simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
     std::string content = "";
 
     if (request_path == "/") {
@@ -48,8 +48,8 @@ bool SendFileCommand::Execute(ComputationContext *context) {
     } else if (mime_type == "css") {
         mime_type = "text/css";
     }
-    response->SetHeader("Content-Type", mime_type);
-    response->SetContent(content);
+    response.SetHeader("Content-Type", mime_type);
+    response.SetContent(content);
     context->Put("response", response);
     return true;
 }

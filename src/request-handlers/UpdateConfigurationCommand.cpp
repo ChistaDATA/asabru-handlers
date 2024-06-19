@@ -18,9 +18,9 @@ bool UpdateConfigurationCommand::Execute(ComputationContext *context) {
     if (functionAny.type() == typeid(std::string (*)(std::string))) {
         auto updateConfiguration = std::any_cast<std::string (*)(std::string)>(functionAny);
         std::string response_content = updateConfiguration(request->content());
-        auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
-        response->SetHeader("Content-Type", "text/plain");
-        response->SetContent(response_content);
+        simple_http_server::HttpResponse response(simple_http_server::HttpStatusCode::Ok);
+        response.SetHeader("Content-Type", "text/plain");
+        response.SetContent(response_content);
         context->Put("response", response);
         return true;
     } else {

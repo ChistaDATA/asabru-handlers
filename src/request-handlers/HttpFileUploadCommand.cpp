@@ -20,7 +20,7 @@ extern "C" void destroyHttpFileUploadCommand(HttpFileUploadCommand *c)
 bool HttpFileUploadCommand::Execute(ComputationContext *context) {
     auto *request = std::any_cast<const simple_http_server::HttpRequest *>(context->Get("request"));
 
-    auto *response = new simple_http_server::HttpResponse(simple_http_server::HttpStatusCode::Ok);
+    simple_http_server::HttpResponse response(simple_http_server::HttpStatusCode::Ok);
     std::string content = "";
 
     std::string publicFolderPath = std::getenv("PUBLIC_FOLDER_PATH");
@@ -79,9 +79,9 @@ bool HttpFileUploadCommand::Execute(ComputationContext *context) {
         std::cout << "File uploaded successfully.\n";
     }
 
-    response->SetHeader("Content-Type", "text/html");
-    response->SetHeader("Connection", "close");
-    response->SetContent(content);
+    response.SetHeader("Content-Type", "text/html");
+    response.SetHeader("Connection", "close");
+    response.SetContent(content);
     context->Put("response", response);
     return true;
 }
