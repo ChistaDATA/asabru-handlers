@@ -35,16 +35,18 @@ namespace clickhouse_pipeline {
                 std::cout << "Buffer length " << std::string((char *) buf->base).size() << std::endl;
                 std::string response = connection_data->proxy_handler->HandleUpstreamData(buf->base, nread, &exec_context);
                 // Data received from the client, forward it to the target server
-                auto *write_req = new uv_write_t;
+                // auto *write_req = new uv_write_t;
+                uv_write_t write_req;
                 uv_buf_t write_buf = uv_buf_init((char *) response.c_str(), response.size());
-                uv_write(write_req, (uv_stream_t *) &pair->target, &write_buf, 1, nullptr);
+                uv_write(&write_req, (uv_stream_t *) &pair->target, &write_buf, 1, nullptr);
             } else {
                 std::cout << "Calling Proxy Downstream Handler.." << std::endl;
                 std::string response = connection_data->proxy_handler->HandleDownStreamData(buf->base, nread, &exec_context);
                 // Data received from the target server, forward it to the client
-                auto *write_req = new uv_write_t;
+                // auto *write_req = new uv_write_t;
+                uv_write_t write_req;
                 uv_buf_t write_buf = uv_buf_init((char *) response.c_str(), response.size());
-                uv_write(write_req, (uv_stream_t *) &pair->client, &write_buf, 1, nullptr);
+                uv_write(&write_req, (uv_stream_t *) &pair->client, &write_buf, 1, nullptr);
             }
 
             free(buf->base);
