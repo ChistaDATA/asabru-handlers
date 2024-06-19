@@ -1,22 +1,22 @@
 #include "Utils.h"
 #include "interface/CProtocolSocket.h"
+#include "logger/Logger.h"
 #include "socket/Socket.h"
 #include "socket/SocketSelect.h"
-#include "logger/Logger.h"
 
 extern "C" void *CProtocolPipeline(CProtocolSocket *ptr, void *lptr) {
-    LOG_INFO("Starting ProtocolPipeline");
-    CLIENT_DATA clientData;
-    memcpy(&clientData, lptr, sizeof(CLIENT_DATA));
+	LOG_INFO("Starting ProtocolPipeline");
+	CLIENT_DATA clientData;
+	memcpy(&clientData, lptr, sizeof(CLIENT_DATA));
 
-    // Check if handler is defined
-    CProtocolHandler *protocol_handler = ptr->GetHandler();
-    if (protocol_handler == nullptr) {
-        LOG_ERROR("The handler is not defined. Exiting!");
-        return nullptr;
-    }
-    auto *client_socket = (Socket *) clientData.client_socket;
-    EXECUTION_CONTEXT exec_context;
+	// Check if handler is defined
+	CProtocolHandler *protocol_handler = ptr->GetHandler();
+	if (protocol_handler == nullptr) {
+		LOG_ERROR("The handler is not defined. Exiting!");
+		return nullptr;
+	}
+	auto *client_socket = (Socket *)clientData.client_socket;
+	EXECUTION_CONTEXT exec_context;
 
     ProtocolHelper::SetReadTimeOut(client_socket->GetSocket(), 1);
     std::string request;
@@ -61,18 +61,18 @@ extern "C" void *CProtocolPipeline(CProtocolSocket *ptr, void *lptr) {
         }
     }
 
-    if (!request.empty()) {
-        response = protocol_handler->HandleData(request, request.size(), &exec_context);
-        client_socket->SendBytes((char *) response.c_str(), response.size());
-    }
+	if (!request.empty()) {
+		response = protocol_handler->HandleData(request, request.size(), &exec_context);
+		client_socket->SendBytes((char *)response.c_str(), response.size());
+	}
 
-    // Close the client socket
-    LOG_INFO("Closing the client socket");
-    client_socket->Close();
+	// Close the client socket
+	LOG_INFO("Closing the client socket");
+	client_socket->Close();
 
 #ifdef WINDOWS_OS
-    return 0;
+	return 0;
 #else
-    return nullptr;
+	return nullptr;
 #endif
 }
