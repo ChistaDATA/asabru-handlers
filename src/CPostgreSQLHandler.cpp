@@ -14,11 +14,8 @@ extern "C" void destroyCPostgreSQLHandler(CPostgreSQLHandler *c) { delete c; }
  * @param buffer - the buffer containing the message bytes
  */
 size_t getMessageBodyLength(std::string buffer) {
-	const std::string packet_length_nw_bytes = buffer.substr(1, MSG_LENGTH_LEN);
-	uint32_t packet_length_nw = 0;
-	memcpy(&packet_length_nw, &packet_length_nw_bytes, MSG_LENGTH_LEN);
-	const uint32_t packet_length = ntohl(packet_length_nw);
-	return packet_length - MSG_LENGTH_LEN;
+	const uint32_t packet_length = readBEInt32(buffer, 1);
+	return packet_length - 4;
 }
 
 /**
